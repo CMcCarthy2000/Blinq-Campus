@@ -1,8 +1,3 @@
-# Deprecation Notice
-
-This project is deprecated, however it still may receive maintenance updates.
-
-PRs for small fixes are more than welcome.
 
 ## Deploying a new release
 
@@ -29,7 +24,7 @@ tmux a -t 4
 
 ## Description
 
-This is the web client for Revolt, which is also available live at [app.revolt.chat](https://app.revolt.chat).
+This is the web client for Webster Groves High School, which is also available live at [app.revolt.chat](https://app.revolt.chat).
 
 ## Pending Rewrite
 
@@ -94,4 +89,4 @@ You can now access the client at http://local.revolt.chat:3000.
 
 ## License
 
-Revite is licensed under the [GNU Affero General Public License v3.0](https://github.com/revoltchat/revite/blob/master/LICENSE).
+Revite is licensed under the [GNU Affero General Public License v3.0]([https://github.com/revoltchat/revite/blob/master/LICENSE](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE)).
