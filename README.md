@@ -44,18 +44,6 @@ The following code is pending a partial or full rewrite:
 This project contains submodules. Run `git submodule init` after you clone this repository to initialize the submodules.
 It is also recommended to run `git submodule update` after you pull from upstream.
 
-## Resources
-
-### Revite
-
--   [Revite Issue Board](https://github.com/revoltchat/revite/issues)
--   [Google Drive Folder with Screenshots](https://drive.google.com/drive/folders/1Ckhl7_9OTTaKzyisrWHzZw1hHj55JwhD)
-
-### Revolt
-
--   [Revolt Project Board](https://github.com/revoltchat/revolt/discussions) (Submit feature requests here)
--   [Revolt Testers Server](https://app.revolt.chat/invite/Testers)
--   [Contribution Guide](https://developers.revolt.chat/contributing)
 
 ## Quick Start
 
