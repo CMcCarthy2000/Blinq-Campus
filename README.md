@@ -50,7 +50,7 @@ It is also recommended to run `git submodule update` after you pull from upstrea
 Get revite up and running locally.
 
 ```
-git clone --recursive https://github.com/revoltchat/revite
+git clone --recursive https://github.com/CMcCarthy2000/WGSD-chat/
 cd revite
 yarn
 yarn build:deps
@@ -77,4 +77,4 @@ You can now access the client at http://local.revolt.chat:3000.
 
 ## License
 
-Revite is licensed under the [GNU Affero General Public License v3.0]([https://github.com/revoltchat/revite/blob/master/LICENSE](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE)).
+Revite is licensed under the [GNU Affero General Public License v3.0](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE).
