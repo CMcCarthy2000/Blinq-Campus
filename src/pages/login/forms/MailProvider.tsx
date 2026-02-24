@@ -21,6 +21,7 @@ function mapMailProvider(email?: string): [string, string] | undefined {
         case "tuta.io":
             return ["Tutanota", "https://mail.tutanota.com"];
         case "outlook.com":
+        /* case "chivanet.org": */ // Chivanet is the email provider I use - Conor
         case "hotmail.com":
         case "outlook.jp":
         case "outlook.fr":
