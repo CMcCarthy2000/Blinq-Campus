@@ -21,8 +21,13 @@ function mapMailProvider(email?: string): [string, string] | undefined {
         case "tuta.io":
             return ["Tutanota", "https://mail.tutanota.com"];
         case "outlook.com":
-        /* case "chivanet.org": */ // Chivanet is the email provider I use - Conor
-        case "hotmail.com":
+        /* case "chivanet.org": */
+       
+        /* Uncomment if registering with the school domain is broken - Conor
+        case "wgmail.org":
+        case "wgcloud.org"
+        */
+        case "hotmail.com": /* who still uses hotmail? - Conor */
         case "outlook.jp":
         case "outlook.fr":
         case "outlook.dk":
