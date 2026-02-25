@@ -66,10 +66,10 @@ export function MailProvider({ email }: Props) {
             {!isRecommended && (
                 <Tip palette="error">
                     <span>
-                       Please note that if you are on a district issued device you might
-                       not be able to view the verification email. To get around this 
-                       please register the account on a personal device and log in 
-                       on the district device after verifying your account.
+                        Please note that if you are on a district issued device you might
+                        not be able to view the verification email. To get around this
+                        please register the account on a personal device and log in
+                        on the district device after verifying your account.
                     </span>
                 </Tip>
             )}
