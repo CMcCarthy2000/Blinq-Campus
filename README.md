@@ -56,9 +56,9 @@ yarn
 yarn build:deps
 yarn dev
 ```
-To get the client fully working look though these
-https://github.com/stoatchat/self-hosted/issues/25
-https://github.com/stoatchat/self-hosted 
+To get the client fully working look though this
+https://github.com/stoatchat/self-hosted it contains the info needed to setup the backend parts of the program
+
 
 You can now access the client at http://local.revolt.chat:3000.
 
