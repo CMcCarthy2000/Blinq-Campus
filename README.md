@@ -3,7 +3,7 @@
 
 ## Description
 
-This is the web client for Webster Groves High School, `https://placeholder.com`.
+This is the web client for Webster Groves High School, `REPLACE_ME_WITH_URL`.
 
 
 ## Quick Start
@@ -19,7 +19,7 @@ yarn dev
 ```
 To get the client fully working look though this
 https://github.com/stoatchat/self-hosted it contains the info needed to setup the backend parts of the program
-You can now access the client at `https://placeholder.com`.
+You can now access the client at `REPLACE_ME_WITH_URL`.
 
 
 ## Submodule Hint
@@ -32,7 +32,7 @@ It is also recommended to run `git submodule update` after you pull from upstrea
 
 ## Deploying a new release
 
-Ensure `.env.local` points to `https://placeholder.com`.
+Ensure `.env.local` points to `REPLACE_ME_WITH_URL`.
 
 ```bash
 cd ~/deployments/revite
