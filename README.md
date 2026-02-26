@@ -15,16 +15,17 @@ export REVOLT_SAAS_BRANCH=revite/main
 export REMOTE=root@production
 scripts/publish.sh
 
-# SSH in and restart revite:
+# SSH in and restart WGSD chat:
 ssh $REMOTE
 tmux a -t 4
 ```
 
-# Revite
+# WGSD Chat
 
 ## Description
 
-This is the web client for Webster Groves High School, which is also available live at [app.revolt.chat](https://app.revolt.chat).
+This is the web client for Webster Groves High School, *SITE LINK GOES HERE*.
+
 
 ## Pending Rewrite
 
@@ -47,11 +48,11 @@ It is also recommended to run `git submodule update` after you pull from upstrea
 
 ## Quick Start
 
-Get revite up and running locally.
+Get WGSD chat up and running locally.
 
 ```
 git clone --recursive https://github.com/CMcCarthy2000/WGSD-chat/
-cd revite
+cd WGSD-chat
 yarn
 yarn build:deps
 yarn dev
@@ -60,15 +61,16 @@ To get the client fully working look though this
 https://github.com/stoatchat/self-hosted it contains the info needed to setup the backend parts of the program
 
 
-You can now access the client at http://local.revolt.chat:3000.
+
+You can now access the client at *LOCAL LINK GOES HERE*
 
 ## CLI Commands
 
 | Command                                 | Description                                  |
 | --------------------------------------- | -------------------------------------------- |
-| `yarn pull`                             | Setup assets required for Revite.            |
-| `yarn dev`                              | Start the Revolt client in development mode. |
-| `yarn build`                            | Build the Revolt client.                     |
+| `yarn pull`                             | Setup assets required for WGSD chat.         |
+| `yarn dev`                              | Start the chat client in development mode.   |
+| `yarn build`                            | Build the chat client.                       |
 | `yarn build:deps`                       | Build external dependencies.                 |
 | `yarn preview`                          | Start a local server with the built client.  |
 | `yarn lint`                             | Run ESLint on the client.                    |
@@ -78,6 +80,10 @@ You can now access the client at http://local.revolt.chat:3000.
 | `yarn start:inject`                     | Inject a given API URL and start server.     |
 | `yarn lint \| egrep "no-literals" -B 1` | Scan for untranslated strings.               |
 
+
+
+# Pre demo
+
 ## License
 
-Revite is licensed under the [GNU Affero General Public License v3.0](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE).
+WGSD Chat is licensed under the [GNU Affero General Public License v3.0](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE).

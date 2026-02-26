@@ -10,6 +10,7 @@ import { Button, Checkbox, Preloader } from "@revoltchat/ui";
 
 import { useApplicationState } from "../../mobx/State";
 import { SECTION_NSFW } from "../../mobx/stores/Layout";
+
 /**
 We're most likely gonna have to rewrite this to comply with the district rules. Also when testing the new filter lets not use the school network...
 */
