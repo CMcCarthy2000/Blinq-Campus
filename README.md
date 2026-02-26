@@ -1,7 +1,38 @@
+# WGSD Chat
+#### Pre demo
+
+## Description
+
+This is the web client for Webster Groves High School, `https://placeholder.com`.
+
+
+## Quick Start
+
+### Get WGSD chat up and running locally.
+
+```
+git clone --recursive https://github.com/CMcCarthy2000/WGSD-chat/
+cd WGSD-chat
+yarn
+yarn build:deps
+yarn dev
+```
+To get the client fully working look though this
+https://github.com/stoatchat/self-hosted it contains the info needed to setup the backend parts of the program
+You can now access the client at `https://placeholder.com`.
+
+
+## Submodule Hint
+
+This project contains submodules. Run `git submodule init` after you clone this repository to initialize the submodules.
+It is also recommended to run `git submodule update` after you pull from upstream.
+
+
+
 
 ## Deploying a new release
 
-Ensure `.env.local` points to `https://app.revolt.chat/api`.
+Ensure `.env.local` points to `https://placeholder.com`.
 
 ```bash
 cd ~/deployments/revite
@@ -19,51 +50,6 @@ scripts/publish.sh
 ssh $REMOTE
 tmux a -t 4
 ```
-
-# WGSD Chat
-
-## Description
-
-This is the web client for Webster Groves High School, *SITE LINK GOES HERE*.
-
-
-## Pending Rewrite
-
-The following code is pending a partial or full rewrite:
-
--   `src/components`: components are being migrated to [revoltchat/components](https://github.com/revoltchat/components)
--   `src/styles`: needs to be migrated to [revoltchat/components](https://github.com/revoltchat/components)
--   `src/lib`: this needs to be organised
-
-## Stack
-
--   [Preact](https://preactjs.com/)
--   [Vite](https://vitejs.dev/)
-
-## Submodule Hint
-
-This project contains submodules. Run `git submodule init` after you clone this repository to initialize the submodules.
-It is also recommended to run `git submodule update` after you pull from upstream.
-
-
-## Quick Start
-
-Get WGSD chat up and running locally.
-
-```
-git clone --recursive https://github.com/CMcCarthy2000/WGSD-chat/
-cd WGSD-chat
-yarn
-yarn build:deps
-yarn dev
-```
-To get the client fully working look though this
-https://github.com/stoatchat/self-hosted it contains the info needed to setup the backend parts of the program
-
-
-
-You can now access the client at *LOCAL LINK GOES HERE*
-
 ## CLI Commands
 
 | Command                                 | Description                                  |
@@ -82,7 +68,19 @@ You can now access the client at *LOCAL LINK GOES HERE*
 
 
 
-# Pre demo
+## Pending Rewrite
+
+The following code is pending a partial or full rewrite:
+
+-   `src/components`: components are being migrated to [revoltchat/components](https://github.com/revoltchat/components)
+-   `src/styles`: needs to be migrated to [revoltchat/components](https://github.com/revoltchat/components)
+-   `src/lib`: this needs to be organised
+
+## Stack
+
+-   [Preact](https://preactjs.com/)
+-   [Vite](https://vitejs.dev/)
+
 
 ## License
 
