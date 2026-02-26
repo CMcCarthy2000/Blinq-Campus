@@ -1,10 +1,10 @@
 # WGSD Chat
+
 #### Pre demo
 
 ## Description
 
 This is the web client for Webster Groves High School, `REPLACE_ME_WITH_URL`.
-
 
 ## Quick Start
 
@@ -12,23 +12,17 @@ This is the web client for Webster Groves High School, `REPLACE_ME_WITH_URL`.
 
 ```
 git clone --recursive https://github.com/CMcCarthy2000/WGSD-chat/
+git submodule init
+git submodule update
 cd WGSD-chat
 yarn
 yarn build:deps
 yarn dev
 ```
+
 To get the client fully working look though this
 https://github.com/stoatchat/self-hosted it contains the info needed to setup the backend parts of the program
 You can now access the client at `REPLACE_ME_WITH_URL`.
-
-
-## Submodule Hint
-
-This project contains submodules. Run `git submodule init` after you clone this repository to initialize the submodules.
-It is also recommended to run `git submodule update` after you pull from upstream.
-
-
-
 
 ## Deploying a new release
 
@@ -50,6 +44,7 @@ scripts/publish.sh
 ssh $REMOTE
 tmux a -t 4
 ```
+
 ## CLI Commands
 
 | Command                                 | Description                                  |
@@ -66,8 +61,6 @@ tmux a -t 4
 | `yarn start:inject`                     | Inject a given API URL and start server.     |
 | `yarn lint \| egrep "no-literals" -B 1` | Scan for untranslated strings.               |
 
-
-
 ## Pending Rewrite
 
 The following code is pending a partial or full rewrite:
@@ -80,7 +73,6 @@ The following code is pending a partial or full rewrite:
 
 -   [Preact](https://preactjs.com/)
 -   [Vite](https://vitejs.dev/)
-
 
 ## License
 
