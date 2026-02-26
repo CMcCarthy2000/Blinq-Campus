@@ -1,5 +1,5 @@
 ██████████████████████████████████████████████████████
-                                                                                               
+                                                       
  ███████████    ███████    ██████████      ███████     
  █   ███   █  ███     ███   ███    ███   ███     ███   
      ███     ███       ███  ███     ███ ███       ███  
@@ -16,3 +16,4 @@ SET UP WEB SERVER [ ]
 SET UP VOICE CHAT [ ] 
 SET UP MESSAGE MONITORING [ ] 
 CREATE APPLICATION FOR MAC/WINDOWS/LINUX [ ] 
+MAKE SURE GABE KEEPS HIS SANITY [ ] 
