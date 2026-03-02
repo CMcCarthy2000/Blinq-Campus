@@ -44,11 +44,19 @@
     padding: 40px 35px;
     display: flex;
     user-select: none;
-    background: url("/src/pages/login/background.jpg");
+    background: url("/src/pages/login/background.gif");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     /*animation: shrink 5s normal forwards;*/
+
+    #myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    }
 
     .nav {
         display: flex;

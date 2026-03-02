@@ -10,7 +10,7 @@ import { useApplicationState } from "../../mobx/State";
 
 import wideSVG from "/assets/wide.svg";
 
-import LocaleSelector from "../../components/common/LocaleSelector";
+/*import LocaleSelector from "../../co}mponents/common/LocaleSelector"; */
 import { Titlebar } from "../../components/native/Titlebar";
 import { useSystemAlert } from "../../updateWorker";
 import { StatusBar } from "../RevoltApp";
@@ -62,7 +62,7 @@ export default observer(() => {
                                 <img src={wideSVG} draggable={false} />
                             )}
                         </a>
-                        <LocaleSelector />
+                        {/* <LocaleSelector /> */}
                     </div>
                     {/*<div className={styles.middle}>*/}
                     <div className={styles.form}>
@@ -143,8 +143,8 @@ export default observer(() => {
                             href="https://unsplash.com/@fakurian"
                             target="_blank"
                             rel="noreferrer">
-                            <Text id="general.image_by" /> &lrm;@fakurian &rlm;·
-                            unsplash.com
+                            {/* <Text id="general.image_by" /> &lrm;@fakurian &rlm;·
+                            unsplash.com */}
                         </a>
                     </div>
                 </div>
