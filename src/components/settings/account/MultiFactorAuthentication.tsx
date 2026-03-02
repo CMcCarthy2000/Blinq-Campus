@@ -28,6 +28,7 @@ export function toConfig(token: string) {
  * Component for configuring MFA on an account.
  */
 export default function MultiFactorAuthentication() {
+    const twoFactorLocked = true;
     // Pull in prerequisites
     const session = useSession()!;
     const client = session.client!;
@@ -163,6 +164,9 @@ export default function MultiFactorAuthentication() {
             <h5>
                 <Text id="app.settings.pages.account.2fa.description" />
             </h5>
+            {twoFactorLocked && (
+                <h5>2FA configuration is currently disabled on this instance.</h5>
+            )}
 
             {error && (
                 <Category compact>
@@ -181,7 +185,7 @@ export default function MultiFactorAuthentication() {
                         }_long`}
                     />
                 }
-                disabled={!mfa}
+                disabled={!mfa || twoFactorLocked}
                 onClick={recoveryAction}>
                 <Text
                     id={`app.settings.pages.account.2fa.${
@@ -199,7 +203,11 @@ export default function MultiFactorAuthentication() {
                     />
                 }
                 description={"Set up time-based one-time password."}
-                disabled={!mfa || (!mfa.recovery_active && !mfa.totp_mfa)}
+                disabled={
+                    !mfa ||
+                    twoFactorLocked ||
+                    (!mfa.recovery_active && !mfa.totp_mfa)
+                }
                 onClick={totpAction}>
                 <Text
                     id={`app.settings.pages.account.2fa.${

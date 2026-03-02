@@ -12,6 +12,8 @@ import { modalController } from "../modals/ModalController";
 import Session from "./Session";
 import { takeError } from "./jsx/error";
 
+const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+
 /**
  * Controls the lifecycles of clients
  */
@@ -38,7 +40,7 @@ class ClientController {
 
     constructor() {
         this.apiClient = new Client({
-            apiURL: import.meta.env.VITE_API_URL,
+            apiURL: import.meta.env.VITE_API_URL ?? DEFAULT_API_URL,
         });
 
         // ! FIXME: loop until success infinitely
@@ -189,7 +191,7 @@ class ClientController {
             const { os } = browser;
             let isiPad;
             if (window.isNative) {
-                friendly_name = `Revolt Desktop on ${os}`;
+                friendly_name = `Blinq Campus Desktop on ${os}`;
             } else {
                 if (name === "ios") {
                     name = "safari";

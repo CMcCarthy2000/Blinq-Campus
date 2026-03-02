@@ -32,12 +32,12 @@ export default function ConfirmDelete() {
                         <br />
                         You may contact{" "}
                         <a href="mailto:contact@revolt.chat">
-                            Revolt support
+                            Blinq Campus support
                         </a>{" "}
                         to cancel the request if you wish.
                     </>
                 ) : (
-                    "Contacting the server."
+                    "Contacting the classroom service."
                 )
             }
             nonDismissable>

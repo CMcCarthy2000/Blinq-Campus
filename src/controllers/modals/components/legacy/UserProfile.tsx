@@ -55,6 +55,7 @@ export const UserProfile = observer(
         const [isPublicBot, setIsPublicBot] = useState<
             undefined | null | boolean
         >();
+        const [accountEmail, setAccountEmail] = useState<string>();
 
         const history = useHistory();
         const session = useSession()!;
@@ -126,6 +127,17 @@ export const UserProfile = observer(
             }
         }, [isPublicBot, session.state, user, client.bots]);
 
+        useEffect(() => {
+            if (session.state !== "Online") return;
+            if (user._id !== client.user?._id) return;
+            if (accountEmail) return;
+
+            client.api
+                .get("/auth/account/")
+                .then((account) => setAccountEmail(account.email))
+                .catch(noop);
+        }, [session.state, user._id, client, accountEmail]);
+
         const backgroundURL =
             profile &&
             client.generateFileURL(
@@ -176,9 +188,7 @@ export const UserProfile = observer(
                                     className={styles.username}
                                     onClick={() =>
                                         modalController.writeText(
-                                            user.username +
-                                                "#" +
-                                                user.discriminator,
+                                            accountEmail ?? user.username,
                                         )
                                     }>
                                     <Localizer>
@@ -186,7 +196,7 @@ export const UserProfile = observer(
                                             content={
                                                 <Text id="app.special.copy_username" />
                                             }>
-                                            {user.username}#{user.discriminator}
+                                            {accountEmail ?? user.username}
                                         </Tooltip>
                                     </Localizer>
                                 </span>
@@ -203,7 +213,7 @@ export const UserProfile = observer(
                                     palette="accent"
                                     compact
                                     onClick={props.onClose}>
-                                    {"Add to server" /* FIXME: i18n */}
+                                    {"Add to classroom" /* FIXME: i18n */}
                                 </Button>
                             </Link>
                         )}

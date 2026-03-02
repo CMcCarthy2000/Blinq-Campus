@@ -6,12 +6,14 @@ import styled from "styled-components/macro";
 
 import { openContextMenu } from "preact-context-menu";
 import { Text, Localizer } from "preact-i18n";
+import { useEffect, useState } from "preact/hooks";
 
 import { Header, IconButton } from "@revoltchat/ui";
 
 import { isTouchscreenDevice } from "../../../lib/isTouchscreenDevice";
 
 import { modalController } from "../../../controllers/modals/ModalController";
+import { useSession } from "../../../controllers/client/ClientController";
 import Tooltip from "../Tooltip";
 import UserStatus from "./UserStatus";
 
@@ -52,6 +54,18 @@ interface Props {
 }
 
 export default observer(({ user }: Props) => {
+    const session = useSession();
+    const [email, setEmail] = useState<string>();
+
+    useEffect(() => {
+        if (!session || session.state !== "Online" || email) return;
+
+        session.client!.api
+            .get("/auth/account/")
+            .then((account) => setEmail(account.email))
+            .catch(() => undefined);
+    }, [session, email]);
+
     return (
         <Header topBorder palette="secondary">
             <HeaderBase>
@@ -59,15 +73,16 @@ export default observer(({ user }: Props) => {
                     {user.display_name ?? user.username}
                 </div>
                 <Localizer>
-                    <Tooltip content={<Text id="app.special.copy_username" />}>
+                    <Tooltip
+                        content={
+                            email ? "Copy email" : <Text id="app.special.copy_username" />
+                        }>
                         <span
                             className="username"
                             onClick={() =>
-                                modalController.writeText(user.username)
+                                modalController.writeText(email ?? user.username)
                             }>
-                            {user.username}
-                            {"#"}
-                            {user.discriminator}
+                            {email ?? user.username}
                         </span>
                     </Tooltip>
                 </Localizer>

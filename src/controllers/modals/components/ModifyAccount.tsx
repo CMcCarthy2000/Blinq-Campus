@@ -139,13 +139,10 @@ export default function ModifyAccount({
                         <div
                             style={{
                                 flexShrink: 0,
-                                width: "80px",
+                                width: "100px",
                                 textAlign: "center",
                             }}>
-                            <InputBox
-                                disabled
-                                value={"#" + client.user.discriminator}
-                            />
+                            <InputBox disabled value="no tag" />
                         </div>
                     </div>
                 )}
@@ -173,9 +170,8 @@ export default function ModifyAccount({
                 {field === "username" && (
                     <div style={{ marginTop: "8px" }}>
                         <Tip palette="warning">
-                            Changing your username may change your number tag.
-                            You can freely change the case of your username.
-                            Your number tag may change at most once a day.
+                            Changing your username only changes your username.
+                            Number tags are disabled in this deployment.
                         </Tip>
                     </div>
                 )}

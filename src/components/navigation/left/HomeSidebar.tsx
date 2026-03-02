@@ -115,13 +115,11 @@ export default observer(() => {
                         </span>
                     </ButtonItem>
                 </ConditionalLink>
-                {import.meta.env.DEV && (
+                {client.user?.privileged && (
                     <Link to="/dev">
                         <ButtonItem active={pathname === "/dev"}>
                             <Wrench size={20} />
-                            <span>
-                                <Text id="app.navigation.tabs.dev" />
-                            </span>
+                            <span>Admin</span>
                         </ButtonItem>
                     </Link>
                 )}

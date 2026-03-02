@@ -5,6 +5,8 @@ import { isDebug } from "../../revision";
 import Persistent from "../interfaces/Persistent";
 import Store from "../interfaces/Store";
 
+const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+
 /**
  * Stores server configuration data.
  */
@@ -42,7 +44,7 @@ export default class ServerConfig
         const client = new Client({
             unreads: true,
             autoReconnect: true,
-            apiURL: import.meta.env.VITE_API_URL,
+            apiURL: import.meta.env.VITE_API_URL ?? DEFAULT_API_URL,
             debug: isDebug(),
             onPongTimeout: "RECONNECT",
         });

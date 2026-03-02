@@ -1,22 +1,24 @@
 import { Wrench } from "@styled-icons/boxicons-solid";
 
 import { useEffect, useState } from "preact/hooks";
+import { useHistory } from "react-router-dom";
 
 import { Button } from "@revoltchat/ui";
 
 import PaintCounter from "../../lib/PaintCounter";
-import { TextReact } from "../../lib/i18n";
 
 import { PageHeader } from "../../components/ui/Header";
 import { useClient } from "../../controllers/client/ClientController";
 
 export default function Developer() {
-    // const voice = useContext(VoiceContext);
-
     const client = useClient();
-    const userPermission = client.user!.permission;
+    const history = useHistory();
     const [ping, setPing] = useState<undefined | number>(client.websocket.ping);
-    const [crash, setCrash] = useState(false);
+    const [alerts, setAlerts] = useState<any[]>([]);
+    const [audits, setAudits] = useState<any[]>([]);
+    const [dmSummaries, setDmSummaries] = useState<any[]>([]);
+    const [dmSearch, setDmSearch] = useState("");
+    const [loadingDms, setLoadingDms] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(
@@ -27,48 +29,146 @@ export default function Developer() {
         return () => clearInterval(timer);
     }, []);
 
+    useEffect(() => {
+        if (!client.user?.privileged) return;
+
+        client.api
+            .get("/admin/alerts/messages?limit=100")
+            .then(setAlerts)
+            .catch(() => setAlerts([]));
+        client.api
+            .get("/admin/dm-audit?limit=100")
+            .then(setAudits)
+            .catch(() => setAudits([]));
+    }, [client.user?._id]);
+
+    useEffect(() => {
+        if (!client.user?.privileged) return;
+        setLoadingDms(true);
+
+        const timeout = setTimeout(() => {
+            const query = dmSearch
+                ? `?q=${encodeURIComponent(dmSearch)}&limit=500`
+                : "?limit=500";
+
+            client.api
+                .get(`/admin/dms/summary${query}`)
+                .then(setDmSummaries)
+                .catch(() => setDmSummaries([]))
+                .finally(() => setLoadingDms(false));
+        }, 180);
+
+        return () => clearTimeout(timeout);
+    }, [client.user?._id, dmSearch]);
+
+    if (!client.user?.privileged) {
+        return (
+            <div style={{ padding: "16px" }}>
+                <PageHeader icon={<Wrench size="24" />}>Admin</PageHeader>
+                Access denied.
+            </div>
+        );
+    }
+
+    function openChannel(channelId: string) {
+        history.push(`/channel/${channelId}`);
+    }
+
     return (
         <div>
-            <PageHeader icon={<Wrench size="24" />}>Developer Tab</PageHeader>
+            <PageHeader icon={<Wrench size="24" />}>Admin</PageHeader>
             <div style={{ padding: "16px" }}>
                 <PaintCounter always />
             </div>
             <div style={{ padding: "16px" }}>
-                <b>Server Ping:</b> {ping ?? "?"}ms
-                <br />
-                <b>User ID:</b> {client.user!._id} <br />
-                <b>Permission against self:</b> {userPermission} <br />
+                <b>Classroom Service Ping:</b> {ping ?? "?"}ms
             </div>
             <div style={{ padding: "16px" }}>
-                <TextReact
-                    id="login.open_mail_provider"
-                    fields={{ provider: <b>GAMING!</b> }}
+                <b>DM Inspector:</b>
+                <br />
+                <input
+                    placeholder="Search users, or %(text) to search DM content"
+                    value={dmSearch}
+                    onInput={(event) =>
+                        setDmSearch((event.target as HTMLInputElement).value)
+                    }
+                    style={{
+                        width: "100%",
+                        maxWidth: "680px",
+                        padding: "10px 12px",
+                        borderRadius: "10px",
+                        border: "1px solid var(--accent)",
+                        background: "var(--secondary-background)",
+                        color: "var(--foreground)",
+                        outline: "none",
+                    }}
                 />
+                <br />
+                <small>
+                    Example: <code>Gabriel Alex %(assignment overdue)</code>
+                </small>
+                <div style={{ marginTop: "12px" }}>
+                    <b>
+                        Results ({dmSummaries.length})
+                        {loadingDms ? " - loading..." : ""}
+                    </b>
+                    <div
+                        style={{
+                            marginTop: "8px",
+                            maxWidth: "860px",
+                            maxHeight: "420px",
+                            overflowY: "auto",
+                            border: "1px solid var(--secondary-background)",
+                            borderRadius: "12px",
+                            padding: "10px",
+                            background: "var(--background)",
+                        }}>
+                        <div style={{ display: "grid", gap: "8px" }}>
+                            {dmSummaries.map((entry) => (
+                                <button
+                                    key={entry.channel_id}
+                                    onClick={() => openChannel(entry.channel_id)}
+                                    style={{
+                                        textAlign: "left",
+                                        background: "transparent",
+                                        border: "1px solid var(--secondary-background)",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        cursor: "pointer",
+                                        color: "inherit",
+                                    }}>
+                                    <div>
+                                        <b>
+                                            {entry.user_a_name} and {entry.user_b_name}
+                                        </b>
+                                    </div>
+                                    <div
+                                        style={{
+                                            marginTop: "4px",
+                                            opacity: 0.85,
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                        }}>
+                                        {entry.last_message_preview ??
+                                            "(no message content)"}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
-
             <div style={{ padding: "16px" }}>
-                <Button palette="error" onClick={() => setCrash(true)}>
-                    Click to crash app
-                </Button>
-                {
-                    crash &&
-                        (
-                            window as any
-                        ).sus.sus() /* this runs a function that doesn't exist */
-                }
-                {/*<span>
-                    <b>Voice Status:</b> {VoiceStatus[voice.status]}
-                </span>
-                <br />
-                <span>
-                    <b>Voice Room ID:</b> {voice.roomId || "undefined"}
-                </span>
-                <br />
-                <span>
-                    <b>Voice Participants:</b> [
-                    {Array.from(voice.participants.keys()).join(", ")}]
-                </span>
-                <br />*/}
+                <b>Message Alerts ({alerts.length})</b>
+                <pre style={{ whiteSpace: "pre-wrap" }}>
+                    {JSON.stringify(alerts.slice(0, 25), null, 2)}
+                </pre>
+            </div>
+            <div style={{ padding: "16px" }}>
+                <b>DM Audit ({audits.length})</b>
+                <pre style={{ whiteSpace: "pre-wrap" }}>
+                    {JSON.stringify(audits.slice(0, 25), null, 2)}
+                </pre>
             </div>
         </div>
     );

@@ -123,9 +123,17 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        exclude: ["revolt.js", "preact-context-menu", "@revoltchat/ui"],
+        exclude: [
+            "revolt.js",
+            "preact-context-menu",
+            "@revoltchat/ui",
+            "preact/debug",
+        ],
     },
     resolve: {
+        alias: {
+            "preact/debug": resolve(__dirname, "src/lib/noop.ts"),
+        },
         preserveSymlinks: true,
     },
 });

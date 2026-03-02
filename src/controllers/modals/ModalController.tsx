@@ -40,7 +40,6 @@ import MFAEnableTOTP from "./components/MFAEnableTOTP";
 import MFAFlow from "./components/MFAFlow";
 import MFARecovery from "./components/MFARecovery";
 import ModifyAccount from "./components/ModifyAccount";
-import ModifyDisplayname from "./components/ModifyDisplayname";
 import OutOfDate from "./components/OutOfDate";
 import PendingFriendRequests from "./components/PendingFriendRequests";
 import ReportContent from "./components/Report";
@@ -295,7 +294,6 @@ export const modalController = new ModalControllerExtended({
     user_profile: UserProfile,
     report: ReportContent,
     report_success: ReportSuccess,
-    modify_displayname: ModifyDisplayname,
     changelog_usernames: ChangelogUsernames,
     reset_bot_token: Confirmation,
 });

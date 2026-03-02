@@ -23,8 +23,6 @@ import { isTouchscreenDevice } from "../../lib/isTouchscreenDevice";
 
 import { useApplicationState } from "../../mobx/State";
 
-import wideSVG from "/assets/wide.svg";
-
 import { PageHeader } from "../../components/ui/Header";
 import { useClient } from "../../controllers/client/ClientController";
 import { modalController } from "../../controllers/modals/ModalController";
@@ -105,9 +103,7 @@ export default observer(() => {
                     </PageHeader>
                     <div className={styles.homeScreen}>
                         <h3>
-                            <Text id="app.special.modals.onboarding.welcome" />
-                            <br />
-                            <img src={wideSVG} />
+                            Welcome to Blinq Campus
                         </h3>
                         <div className={styles.actions}>
                             <a

@@ -1,7 +1,6 @@
-import { Twitter, Github, Mastodon } from "@styled-icons/boxicons-logos";
 import { observer } from "mobx-react-lite";
 import { Helmet } from "react-helmet";
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import styles from "./Login.module.scss";
 import { Text } from "preact-i18n";
@@ -10,7 +9,7 @@ import { useApplicationState } from "../../mobx/State";
 
 import wideSVG from "/assets/wide.svg";
 
-/*import LocaleSelector from "../../co}mponents/common/LocaleSelector"; */
+import LocaleSelector from "../../components/common/LocaleSelector";
 import { Titlebar } from "../../components/native/Titlebar";
 import { useSystemAlert } from "../../updateWorker";
 import { StatusBar } from "../RevoltApp";
@@ -62,7 +61,7 @@ export default observer(() => {
                                 <img src={wideSVG} draggable={false} />
                             )}
                         </a>
-                        {/* <LocaleSelector /> */}
+                        <LocaleSelector />
                     </div>
                     {/*<div className={styles.middle}>*/}
                     <div className={styles.form}>
@@ -96,56 +95,10 @@ export default observer(() => {
                     {/*</div>*/}
                     <div className={styles.bottom}>
                         <div className={styles.links}>
-                            <div className={styles.socials}>
-                                <a
-                                    href="https://github.com/revoltchat"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    <Github size={24} />
-                                </a>
-                                <a
-                                    href="https://twitter.com/revoltchat"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    <Twitter size={24} />
-                                </a>
-                                <a
-                                    href="https://mastodon.social/@revoltchat"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    <Mastodon size={24} />
-                                </a>
-                            </div>
-                            <div className={styles.bullet} />
                             <div className={styles.revolt}>
-                                <a
-                                    href="https://revolt.chat/about"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    <Text id="general.about" />
-                                </a>
-                                <a
-                                    href="https://revolt.chat/terms"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    <Text id="general.tos" />
-                                </a>
-                                <a
-                                    href="https://revolt.chat/privacy"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    <Text id="general.privacy" />
-                                </a>
+                                <span>Blinq Campus</span>
                             </div>
                         </div>
-                        <a
-                            className={styles.attribution}
-                            href="https://unsplash.com/@fakurian"
-                            target="_blank"
-                            rel="noreferrer">
-                            {/* <Text id="general.image_by" /> &lrm;@fakurian &rlm;·
-                            unsplash.com */}
-                        </a>
                     </div>
                 </div>
             </div>

@@ -6,7 +6,7 @@ import styles from "../Login.module.scss";
 import { Text } from "preact-i18n";
 import { useState } from "preact/hooks";
 
-import { Button, Category, Preloader, Tip } from "@revoltchat/ui";
+import { Button, Category, Preloader } from "@revoltchat/ui";
 
 import { I18nError } from "../../../context/Locale";
 
@@ -14,7 +14,6 @@ import WaveSVG from "../../settings/assets/wave.svg";
 
 import { clientController } from "../../../controllers/client/ClientController";
 import { takeError } from "../../../controllers/client/jsx/error";
-import { IS_REVOLT } from "../../../version";
 import FormField from "../FormField";
 import { CaptchaBlock, CaptchaProps } from "./CaptchaBlock";
 import { MailProvider } from "./MailProvider";
@@ -43,8 +42,14 @@ interface FormInputs {
     invite: string;
 }
 
+const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+
 export const Form = observer(({ page, callback }: Props) => {
     const configuration = clientController.getServerConfig();
+    const googleLoginURL =
+        import.meta.env.VITE_GOOGLE_LOGIN_URL ??
+        `${import.meta.env.VITE_API_URL ?? DEFAULT_API_URL}/auth/session/oauth/google`;
+    const [adminTestMode, setAdminTestMode] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | undefined>(undefined);
@@ -60,6 +65,8 @@ export const Form = observer(({ page, callback }: Props) => {
     });
 
     async function onSubmit(data: FormInputs) {
+        if (page === "login" && !adminTestMode) return;
+
         setGlobalError(undefined);
         setLoading(true);
 
@@ -106,6 +113,26 @@ export const Form = observer(({ page, callback }: Props) => {
             }
         } catch (err) {
             onError(err);
+        }
+    }
+
+    function startGoogleLogin() {
+        window.location.assign(googleLoginURL);
+    }
+
+    async function startAdminTestLogin() {
+        setGlobalError(undefined);
+        setLoading(true);
+
+        try {
+            await callback({
+                email: "admin",
+                password: "admin",
+                invite: "",
+            });
+        } catch (err) {
+            setLoading(false);
+            setGlobalError(takeError(err));
         }
     }
 
@@ -175,7 +202,7 @@ export const Form = observer(({ page, callback }: Props) => {
                         onSubmit,
                     ) as unknown as JSX.GenericEventHandler<HTMLFormElement>
                 }>
-                {page !== "reset" && (
+                {page !== "reset" && page !== "login" && (
                     <FormField
                         type="email"
                         register={register}
@@ -183,9 +210,7 @@ export const Form = observer(({ page, callback }: Props) => {
                         error={errors.email?.message}
                     />
                 )}
-                {(page === "login" ||
-                    page === "create" ||
-                    page === "reset") && (
+                {(page === "create" || page === "reset") && (
                     <FormField
                         type="password"
                         register={register}
@@ -206,21 +231,31 @@ export const Form = observer(({ page, callback }: Props) => {
                         <Text id={`error.${error}`} children={error} />
                     </p>
                 )}
-                <Button>
-                    <Text
-                        id={
-                            page === "create"
-                                ? "login.register"
-                                : page === "login"
-                                ? "login.title"
-                                : page === "reset"
-                                ? "login.set_password"
-                                : page === "resend"
-                                ? "login.resend"
-                                : "login.reset"
-                        }
-                    />
-                </Button>
+                {page === "login" ? (
+                    adminTestMode ? (
+                        <Button type="button" onClick={startAdminTestLogin}>
+                            Admin Test Login
+                        </Button>
+                    ) : (
+                        <Button type="button" onClick={startGoogleLogin}>
+                            Continue with Google
+                        </Button>
+                    )
+                ) : (
+                    <Button>
+                        <Text
+                            id={
+                                page === "create"
+                                    ? "login.register"
+                                    : page === "reset"
+                                    ? "login.set_password"
+                                    : page === "resend"
+                                    ? "login.resend"
+                                    : "login.reset"
+                            }
+                        />
+                    </Button>
+                )}
             </form>
             {page === "create" && (
                 <span className={styles.create}>
@@ -233,40 +268,16 @@ export const Form = observer(({ page, callback }: Props) => {
             {page === "login" && (
                 <>
                     <span className={styles.create}>
-                        <Text id="login.new" />{" "}
-                        <Link to="/login/create">
-                            <Text id="login.create" />
-                        </Link>
+                        {adminTestMode ? (
+                            <a onClick={() => setAdminTestMode(false)}>
+                                Back to Google login
+                            </a>
+                        ) : (
+                            <a onClick={() => setAdminTestMode(true)}>
+                                Use admin test login
+                            </a>
+                        )}
                     </span>
-                    <span className={styles.create}>
-                        <Text id="login.forgot" />{" "}
-                        <Link to="/login/reset">
-                            <Text id="login.reset" />
-                        </Link>
-                    </span>
-                    <span className={styles.create}>
-                        <Text id="login.missing_verification" />{" "}
-                        <Link to="/login/resend">
-                            <Text id="login.resend" />
-                        </Link>
-                    </span>
-                    {!IS_REVOLT && (
-                        <>
-                            <br />
-                            <Tip palette="primary">
-                                <span>
-                                    <Text id="login.unofficial_instance" />{" "}
-                                    <a
-                                        href="https://developers.revolt.chat/faq.html"
-                                        style={{ color: "var(--accent)" }}
-                                        target="_blank"
-                                        rel="noreferrer">
-                                        <Text id="general.learn_more" />
-                                    </a>
-                                </span>
-                            </Tip>
-                        </>
-                    )}
                 </>
             )}
             {(page === "reset" ||

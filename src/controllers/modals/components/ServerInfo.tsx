@@ -40,7 +40,7 @@ export default function ServerInfo({
                 });
                 return true;
             },
-            children: "Leave Server",
+            children: "Leave Classroom",
             palette: "error",
         });
     }

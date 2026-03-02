@@ -70,7 +70,7 @@ export function Feedback() {
                             action="chevron"
                             icon={<Group size={24} />}
                             description="You can report issues and discuss improvements with us directly here.">
-                            {"Join the Revolt Lounge"}
+                            {"Join Blinq Campus Lounge"}
                         </CategoryButton>
                     </a>
                 </Link>

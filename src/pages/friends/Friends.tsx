@@ -88,7 +88,7 @@ export default observer(() => {
                             <MessageAdd size={24} />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip content={"Add Friend"} placement="bottom">
+                    <Tooltip content={"Add Classmate"} placement="bottom">
                         <IconButton
                             onClick={() =>
                                 modalController.push({
@@ -100,7 +100,7 @@ export default observer(() => {
                     </Tooltip>
                     {/* 
                     <div className={styles.divider} />
-                    <Tooltip content={"Friend Activity"} placement="bottom">
+                    <Tooltip content={"Classmate Activity"} placement="bottom">
                         <IconButton>
                             <TennisBall size={24} />
                         </IconButton>            

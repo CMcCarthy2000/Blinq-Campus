@@ -39,7 +39,7 @@ export function OnboardingModal({
         <div className={styles.onboarding}>
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <h1>{"Welcome to Revolt."}</h1>
+                    <h1>{"Welcome to Blinq Campus."}</h1>
                 </div>
                 <div className={styles.form}>
                     {loading ? (
@@ -71,10 +71,6 @@ export function OnboardingModal({
                                         error={error}
                                     />
                                 </div>
-                                <p>
-                                    You will be automatically assigned a number
-                                    tag which you can find from settings.
-                                </p>
                                 <Button palette="accent">
                                     {"Looks good!"}
                                 </Button>

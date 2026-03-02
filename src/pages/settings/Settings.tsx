@@ -28,6 +28,7 @@ import styled from "styled-components/macro";
 import styles from "./Settings.module.scss";
 import { openContextMenu } from "preact-context-menu";
 import { Text } from "preact-i18n";
+import { useEffect, useState } from "preact/hooks";
 
 import { LineDivider } from "@revoltchat/ui";
 
@@ -125,6 +126,14 @@ export default observer(() => {
     const history = useHistory();
     const client = useClient();
     const experiments = useApplicationState().experiments;
+    const [email, setEmail] = useState<string>();
+
+    useEffect(() => {
+        client.api
+            .get("/auth/account/")
+            .then((account) => setEmail(account.email))
+            .catch(() => undefined);
+    }, [client]);
 
     function switchPage(to?: string) {
         if (to) {
@@ -202,7 +211,7 @@ export default observer(() => {
                 },
                 {
                     divider: true,
-                    category: "revolt",
+                    category: "Blinq Campus",
                     id: "bots",
                     icon: <Bot size={20} />,
                     title: <Text id="app.settings.pages.bots.title" />,
@@ -346,9 +355,7 @@ export default observer(() => {
                                     client.user.username}
                             </span>
                             <span className="full">
-                                {client.user.username}
-                                {"#"}
-                                {client.user.discriminator}
+                                {email ?? client.user.username}
                             </span>
                             <UserStatus user={client.user!} />
                         </div>

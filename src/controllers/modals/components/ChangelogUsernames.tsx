@@ -74,7 +74,8 @@ export default function ChangelogUsernames({
                                         fontSize: "0.9em",
                                         fontWeight: 500,
                                     }}>
-                                    We've changed how usernames work on Revolt.
+                                    We've changed how usernames work on Blinq
+                                    Campus.
                                     Now you can set a display name in addition
                                     to a username with a number tag for easier
                                     sharing.

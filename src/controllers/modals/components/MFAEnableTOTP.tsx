@@ -33,7 +33,7 @@ export default function MFAEnableTOTP({
     onClose,
     signal,
 }: ModalProps<"mfa_enable_totp">) {
-    const uri = `otpauth://totp/Revolt:${identifier}?secret=${secret}&issuer=Revolt`;
+    const uri = `otpauth://totp/Blinq Campus:${identifier}?secret=${secret}&issuer=Blinq Campus`;
     const [value, setValue] = useState("");
 
     return (

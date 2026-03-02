@@ -26,36 +26,101 @@
     }
 }
 
-/*@keyframes shrink {
+@keyframes xmb-wave-pan {
     0% {
-        background-size: 140% 140%;
+        background-position:
+            0 0,
+            0 0,
+            0 0;
     }
-    10% {
-        background-size: 150% 150%;
+    50% {
+        background-position:
+            -360px 20px,
+            220px -16px,
+            -180px 10px;
     }
     100% {
-        background-size: 100% 100%;
+        background-position:
+            -720px 0,
+            440px 0,
+            -360px 0;
     }
-}*/
+}
+
+@keyframes xmb-wave-float {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1.02);
+    }
+    50% {
+        transform: translate3d(0, -12px, 0) scale(1.05);
+    }
+    100% {
+        transform: translate3d(0, 0, 0) scale(1.02);
+    }
+}
 
 .login {
+    position: relative;
+    overflow: hidden;
     width: 100%;
     height: 100%;
     padding: 40px 35px;
     display: flex;
     user-select: none;
-    background: url("/src/pages/login/background.gif");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    /*animation: shrink 5s normal forwards;*/
+    background: radial-gradient(circle at 20% 10%, #1c120c 0%, #0a0705 45%, #030202 100%);
 
-    #myVideo {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        inset: -16%;
+        z-index: 0;
+        pointer-events: none;
+        filter: blur(4px);
+    }
+
+    &::before {
+        background:
+            radial-gradient(
+                140% 70% at 50% 128%,
+                rgb(0 0 0 / 0%) 58%,
+                rgb(210 101 42 / 38%) 60% 61%,
+                rgb(0 0 0 / 0%) 63%,
+                rgb(210 101 42 / 26%) 66% 67%,
+                rgb(0 0 0 / 0%) 69%
+            ),
+            radial-gradient(
+                132% 66% at 46% 124%,
+                rgb(0 0 0 / 0%) 60%,
+                rgb(154 67 28 / 30%) 62% 63%,
+                rgb(0 0 0 / 0%) 65%,
+                rgb(154 67 28 / 20%) 68% 69%,
+                rgb(0 0 0 / 0%) 71%
+            ),
+            radial-gradient(120% 100% at 50% 24%, rgb(75 33 15 / 38%) 0%, rgb(75 33 15 / 0%) 70%);
+        background-size: 170% 130%, 160% 125%, 100% 100%;
+        animation:
+            xmb-wave-pan 26s linear infinite,
+            xmb-wave-float 12s ease-in-out infinite;
+    }
+
+    &::after {
+        background:
+            radial-gradient(
+                150% 72% at 54% 132%,
+                rgb(0 0 0 / 0%) 61%,
+                rgb(250 149 78 / 22%) 63% 63.9%,
+                rgb(0 0 0 / 0%) 66%,
+                rgb(250 149 78 / 14%) 69% 69.7%,
+                rgb(0 0 0 / 0%) 72%
+            ),
+            radial-gradient(120% 90% at 50% 10%, rgb(170 72 30 / 28%) 0%, rgb(170 72 30 / 0%) 65%);
+        background-size: 180% 135%, 100% 100%;
+        mix-blend-mode: screen;
+        opacity: 0.8;
+        animation:
+            xmb-wave-pan 36s linear infinite reverse,
+            xmb-wave-float 14s ease-in-out infinite reverse;
     }
 
     .nav {
@@ -71,6 +136,8 @@
     }
 
     .content {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -151,7 +218,6 @@
                 }
             }
 
-            
             .welcome {
                 font-size: 20px;
                 font-weight: 600;
@@ -170,14 +236,6 @@
                         height: 28px;
                     }
                 }
-            }
-
-            .buglist {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                font-weight: 400;
-                font-size: 14px;
             }
 
             .subtitle {
@@ -305,8 +363,6 @@
 @media only screen and (max-width: 768px) {
     .login {
         padding: 30px 20px;
-        background-image: unset;
-        background-color: var(--primary-background);
 
         .content {
             .nav {

@@ -6,6 +6,8 @@ import { state } from "../../mobx/State";
 import { resetMemberSidebarFetched } from "../../components/navigation/right/MemberSidebar";
 import { modalController } from "../modals/ModalController";
 
+const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+
 /**
  * Current lifecycle state
  */
@@ -113,7 +115,7 @@ export default class Session {
             unreads: true,
             autoReconnect: false,
             onPongTimeout: "EXIT",
-            apiURL: apiUrl ?? import.meta.env.VITE_API_URL,
+            apiURL: apiUrl ?? import.meta.env.VITE_API_URL ?? DEFAULT_API_URL,
         });
 
         this.client.addListener("dropped", this.onDropped);

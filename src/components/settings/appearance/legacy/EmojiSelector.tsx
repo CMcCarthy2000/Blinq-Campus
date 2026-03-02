@@ -107,7 +107,7 @@ export function EmojiSelector({ value, setValue }: Props) {
                                 href="https://mutant.revolt.chat"
                                 target="_blank"
                                 rel="noreferrer">
-                                (by Revolt)
+                                (by Blinq Campus)
                             </a>
                         </h4>
                     </div>

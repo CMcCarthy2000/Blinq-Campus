@@ -72,12 +72,12 @@ export default function InviteBot() {
                             )}
                         </div>
                     </BotInfo>
-                    <Category>Add to server</Category>
+                    <Category>Add to classroom</Category>
                     <Option>
                         <ComboBox
                             value={server}
                             onChange={(e) => setServer(e.currentTarget.value)}>
-                            <option value="none">Select a server</option>
+                            <option value="none">Select a classroom</option>
                             {[...client.servers.values()]
                                 .filter((x) => x.havePermission("ManageServer"))
                                 .map((server) => (

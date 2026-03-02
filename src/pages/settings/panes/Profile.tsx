@@ -1,14 +1,12 @@
 import { Markdown } from "@styled-icons/boxicons-logos";
-import { UserCircle } from "@styled-icons/boxicons-solid";
 import { observer } from "mobx-react-lite";
-import { useHistory } from "react-router-dom";
 import { API } from "revolt.js";
 
 import styles from "./Panes.module.scss";
 import { Text } from "preact-i18n";
-import { useCallback, useContext, useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
-import { Button, LineDivider, Tip, CategoryButton } from "@revoltchat/ui";
+import { Button, LineDivider, Tip } from "@revoltchat/ui";
 
 import TextAreaAutoSize from "../../../lib/TextAreaAutoSize";
 import { useTranslation } from "../../../lib/i18n";
@@ -18,14 +16,12 @@ import AutoComplete, {
 } from "../../../components/common/AutoComplete";
 import { useSession } from "../../../controllers/client/ClientController";
 import { FileUploader } from "../../../controllers/client/jsx/legacy/FileUploads";
-import { modalController } from "../../../controllers/modals/ModalController";
 import { UserProfile } from "../../../controllers/modals/components/legacy/UserProfile";
 
 export const Profile = observer(() => {
     const translate = useTranslation();
     const session = useSession()!;
     const client = session.client!;
-    const history = useHistory();
 
     const [profile, setProfile] = useState<undefined | API.UserProfile>(
         undefined,
@@ -49,10 +45,6 @@ export const Profile = observer(() => {
     function setContent(content?: string) {
         setProfile({ ...profile, content });
         if (!changed) setChanged(true);
-    }
-
-    function switchPage(to: string) {
-        history.replace(`/settings/${to}`);
     }
 
     const {
@@ -79,19 +71,6 @@ export const Profile = observer(() => {
                     {...({} as any)}
                 />
             </div>
-            <div className={styles.titleNew}>
-                Display Name
-                <div className={styles.new}>NEW</div>
-            </div>
-            <CategoryButton
-                onClick={() =>
-                    modalController.push({ type: "modify_displayname" })
-                }
-                icon={<UserCircle size={24} />}
-                action="chevron"
-                description={"Change your display name to whatever you like"}>
-                Display Name
-            </CategoryButton>
             {/*<h3>Badges</h3>
             <div className={styles.badgePicker}>
                 <div className={styles.overlay} />
@@ -189,16 +168,7 @@ export const Profile = observer(() => {
             />
             <div className={styles.markdown}>
                 <Markdown size="24" />
-                <h5>
-                    Descriptions support Markdown formatting,{" "}
-                    <a
-                        href="https://developers.revolt.chat/markdown"
-                        target="_blank"
-                        rel="noreferrer">
-                        learn more here
-                    </a>
-                    .
-                </h5>
+                <h5>Descriptions support Markdown formatting.</h5>
             </div>
             <p>
                 <Button
@@ -216,12 +186,7 @@ export const Profile = observer(() => {
 
             <LineDivider />
             <Tip>
-                <span>
-                    Want to change your username?{" "}
-                    <a onClick={() => switchPage("account")}>
-                        Head over to your account settings.
-                    </a>
-                </span>
+                <span>Your display name is synced from your Google account.</span>
             </Tip>
         </div>
     );
