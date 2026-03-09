@@ -1,20 +1,20 @@
-# WGSD Chat
+# Blinq Campus
 
 #### Pre demo
 
 ## Description
 
-This is the web client for Webster Groves High School, `REPLACE_ME_WITH_URL`.
+This is the web client for Blinq Campus, `REPLACE_ME_WITH_URL`.
 
 ## Quick Start
 
-### Get WGSD chat up and running locally.
+### Get Blinq Campus up and running locally.
 
 ```
-git clone --recursive https://github.com/CMcCarthy2000/WGSD-chat/
+git clone --recursive https://github.com/CMcCarthy2000/Blinq-Campus/
 git submodule init
 git submodule update
-cd WGSD-chat
+cd Blinq-Campus
 yarn
 yarn build:deps
 yarn dev
@@ -40,7 +40,7 @@ export REVOLT_SAAS_BRANCH=revite/main
 export REMOTE=root@production
 scripts/publish.sh
 
-# SSH in and restart WGSD chat:
+# SSH in and restart Blinq Campus:
 ssh $REMOTE
 tmux a -t 4
 ```
@@ -49,7 +49,7 @@ tmux a -t 4
 
 | Command                                 | Description                                  |
 | --------------------------------------- | -------------------------------------------- |
-| `yarn pull`                             | Setup assets required for WGSD chat.         |
+| `yarn pull`                             | Setup assets required for Blinq Campus.         |
 | `yarn dev`                              | Start the chat client in development mode.   |
 | `yarn build`                            | Build the chat client.                       |
 | `yarn build:deps`                       | Build external dependencies.                 |
