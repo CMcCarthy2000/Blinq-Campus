@@ -1,0 +1,45 @@
+<!--
+these internal pages are made with simple html/css beause it makes it faster on our slow wifi...
+and it breaks less. this also means in theory the internal pages can be viewed on outdated browsers
+-->
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Internal Login</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <script>
+        // This is just a placeholder for the login functionality. In a real application, you would want to implement proper authentication and security measures.
+        function login(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            // maybe it would be a good idea to encypt this script but we can just leave it 
+            // like this for now because this is just a testing page and not a real application
+            if (username === 'admin' && password === 'password') {
+                window.location.href = 'admin_panel.html';
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+    </script>
+    <body>
+        <!--yes this is not secure at all but we can just ignore that for now-->
+        <h3>Internal Login</h3>
+        <form onsubmit="login(event)">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Login">
+        </form>
+    </body>
+    <footer>
+        <p>&copy; 20XX Testing page. All rights reserved.</p>
+    </footer>
+</html>

@@ -151,6 +151,7 @@
                 }
             }
 
+            
             .welcome {
                 font-size: 20px;
                 font-weight: 600;
@@ -169,6 +170,14 @@
                         height: 28px;
                     }
                 }
+            }
+
+            .buglist {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-weight: 400;
+                font-size: 14px;
             }
 
             .subtitle {

@@ -1,0 +1,1 @@
+Use the contents of this folder to test different features before trying to put them in the main code
