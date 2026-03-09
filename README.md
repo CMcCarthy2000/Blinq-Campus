@@ -17,7 +17,7 @@ git submodule update
 cd Blinq-Campus
 yarn
 yarn build:deps
-yarn dev
+yarn dev --port 14701
 ```
 
 To get the client fully working look though this
