@@ -54,8 +54,8 @@ export default defineConfig({
             filename: "sw.ts",
             strategies: "injectManifest",
             manifest: {
-                name: "Revolt",
-                short_name: "Revolt",
+                name: "Blinq Campus",
+                short_name: "Blinq Campus",
                 description: "User-first, privacy-focused chat platform.",
                 categories: ["communication", "chat", "messaging"],
                 start_url: "/",

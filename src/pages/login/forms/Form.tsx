@@ -42,7 +42,7 @@ interface FormInputs {
     invite: string;
 }
 
-const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+const DEFAULT_API_URL = "https://local.blinqcampus.chat:24702";
 
 export const Form = observer(({ page, callback }: Props) => {
     const configuration = clientController.getServerConfig();
@@ -191,7 +191,7 @@ export const Form = observer(({ page, callback }: Props) => {
                                 : "login.subtitle"
                         }
                     />
-                    <div>(app.revolt.chat)</div>
+                    <div>(app.blinqcampus.chat)</div>
                 </div>
             </div>
 

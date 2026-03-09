@@ -76,4 +76,4 @@ The following code is pending a partial or full rewrite:
 
 ## License
 
-WGSD Chat is licensed under the [GNU Affero General Public License v3.0](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE).
+Blinq Campus is licensed under the [GNU Affero General Public License v3.0](https://github.com/CMcCarthy2000/WGSD-chat/blob/master/LICENSE).
