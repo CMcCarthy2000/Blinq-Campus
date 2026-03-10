@@ -9,7 +9,17 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h3>Welcome to the admin panel</h3>
+        <!--
+        Welcome the user by printing their name after welcome to admin panel using the username input from
+        index.html by saving the username in a cookie
+        -->
+        <h3>Welcome to the admin panel </h3>
+        <script>
+            // Get the username from the cookie
+            const username = document.cookie.split('; ').find(row => row.startsWith('username=')).split('=')[1];
+            // Display the username in the welcome message
+            document.querySelector('h3').textContent += username;
+        </script>
         <p>Here you can manage the chat application.</p>
         <ul>
             <li><a href="/testing/login/managment/status.html">Site status</a></li>

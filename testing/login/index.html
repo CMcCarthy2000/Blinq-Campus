@@ -33,11 +33,16 @@ and it breaks less. this also means in theory the internal pages can be viewed o
         <form onsubmit="login(event)" method="post" autocomplete="off">
             <label for="username">Username:</label><br>
             <input type="text" id="username" name="username"><br>
-            <label for="password">Password:</label>
-            <br>
+            <label for="password">Password:</label><br>
             <input type="password" id="password" name="password"><br><br>
             <input type="submit" value="Login">
         </form>
+        <!--Save the username into a cookie-->
+        <script>
+            document.getElementById('username').addEventListener('input', function() {
+                document.cookie = 'username=' + this.value + '; path=/';
+            });
+        </script>
     </body>
     <footer>
         <p>&copy; 20XX Testing page. All rights reserved.</p>
