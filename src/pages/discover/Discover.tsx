@@ -77,8 +77,8 @@ const Loader = styled.div`
 `;
 
 const TRUSTED_HOSTS = [
-    "local.revolt.chat:3000",
-    "local.revolt.chat:3001",
+    "local.blinqcampus.chat:3000",
+    "local.blinqcampus.chat:3001",
     "rvlt.gg",
 ];
 

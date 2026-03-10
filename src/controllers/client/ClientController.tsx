@@ -12,7 +12,7 @@ import { modalController } from "../modals/ModalController";
 import Session from "./Session";
 import { takeError } from "./jsx/error";
 
-const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+const DEFAULT_API_URL = "https://local.blinqcampus.chat:24702";
 
 /**
  * Controls the lifecycles of clients

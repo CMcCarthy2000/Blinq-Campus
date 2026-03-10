@@ -5,7 +5,7 @@ import { isDebug } from "../../revision";
 import Persistent from "../interfaces/Persistent";
 import Store from "../interfaces/Store";
 
-const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+const DEFAULT_API_URL = "https://local.blinqcampus.chat:24702";
 
 /**
  * Stores server configuration data.

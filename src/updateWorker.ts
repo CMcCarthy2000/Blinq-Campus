@@ -113,7 +113,7 @@ async function checkVersion() {
 
 if (
     import.meta.env.VITE_API_URL === "https://api.revolt.chat" ||
-    import.meta.env.VITE_API_URL === "https://app.revolt.chat/api"
+    import.meta.env.VITE_API_URL === "https://local.blinqcampus.chat/api"
 ) {
     // Check for critical updates hourly
     schedule();

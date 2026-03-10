@@ -6,7 +6,7 @@ import { state } from "../../mobx/State";
 import { resetMemberSidebarFetched } from "../../components/navigation/right/MemberSidebar";
 import { modalController } from "../modals/ModalController";
 
-const DEFAULT_API_URL = "https://local.revolt.chat:24702";
+const DEFAULT_API_URL = "https://local.blinqcampus.chat:24702";
 
 /**
  * Current lifecycle state

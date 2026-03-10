@@ -14,9 +14,8 @@ type LinkType =
  */
 const ALLOWED_ORIGINS = [
     location.hostname,
-    "app.revolt.chat",
+    "local.blinqcampus.chat",
     "nightly.revolt.chat",
-    "local.revolt.chat",
     "rolt.chat",
 ];
 

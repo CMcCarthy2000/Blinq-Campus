@@ -176,9 +176,8 @@ export function EmbedInvite({ code }: Props) {
 
 const INVITE_PATHS = [
     `${location.hostname}/invite`,
-    "app.revolt.chat/invite",
+    "local.blinqcampus.chat/invite",
     "nightly.revolt.chat/invite",
-    "local.revolt.chat/invite",
     "rvlt.gg",
 ];
 

@@ -20,7 +20,7 @@ body:
       label: Branch
       description: What branch of Revolt are you using?
       options:
-        - Production (app.revolt.chat)
+        - Production (local.blinqcampus.chat)
         - Nightly (nightly.revolt.chat)
     validations:
       required: true
