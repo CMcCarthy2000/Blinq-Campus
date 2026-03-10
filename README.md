@@ -56,18 +56,7 @@ tmux a -t 4
 | `yarn preview`                          | Start a local server with the built client.  |
 | `yarn lint`                             | Run ESLint on the client.                    |
 | `yarn fmt`                              | Run Prettier on the client.                  |
-| `yarn typecheck`                        | Run TypeScript type checking on the client.  |
-| `yarn start`                            | Start a local sirv server with built client. |
-| `yarn start:inject`                     | Inject a given API URL and start server.     |
-| `yarn lint \| egrep "no-literals" -B 1` | Scan for untranslated strings.               |
-
-## Pending Rewrite
-
-The following code is pending a partial or full rewrite:
-
--   `src/components`: components are being migrated to [revoltchat/components](https://github.com/revoltchat/components)
--   `src/styles`: needs to be migrated to [revoltchat/components](https://github.com/revoltchat/components)
--   `src/lib`: this needs to be organised
+| `yarn typecheck`                        | Run TypeScript type checking on the 2to be organised
 
 ## Stack
 
