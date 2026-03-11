@@ -5,12 +5,7 @@ import { observer } from "mobx-react-lite";
 import { Text } from "preact-i18n";
 import { useEffect, useState } from "preact/hooks";
 
-import {
-    AccountDetail,
-    CategoryButton,
-    Column,
-    HiddenValue,
-} from "@revoltchat/ui";
+import { AccountDetail, CategoryButton, Column } from "@revoltchat/ui";
 
 import { useSession } from "../../../controllers/client/ClientController";
 import { modalController } from "../../../controllers/modals/ModalController";
@@ -41,9 +36,7 @@ export default observer(() => {
                         ? ([
                               [
                                   "username",
-                                  client.user!.username +
-                                      "#" +
-                                      client.user!.discriminator,
+                                  email,
                                   At,
                               ],
                           ] as const)
@@ -55,16 +48,7 @@ export default observer(() => {
                 <CategoryButton
                     key={field}
                     icon={<Icon size={24} />}
-                    description={
-                        field === "email" ? (
-                            <HiddenValue
-                                value={value}
-                                placeholder={"•••••••••••@••••••.•••"}
-                            />
-                        ) : (
-                            value
-                        )
-                    }
+                    description={value}
                     account
                     action={<Pencil size={20} />}
                     onClick={() =>

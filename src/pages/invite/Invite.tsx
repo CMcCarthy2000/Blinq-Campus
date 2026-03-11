@@ -36,6 +36,18 @@ export default function Invite() {
     );
 
     useEffect(() => {
+        const canonical = import.meta.env.VITE_CANONICAL_ORIGIN;
+        if (
+            canonical &&
+            typeof window !== "undefined" &&
+            window.location.origin !== canonical
+        ) {
+            window.location.replace(
+                `${canonical}${window.location.pathname}${window.location.search}${window.location.hash}`,
+            );
+            return;
+        }
+
         if (typeof invite === "undefined") {
             client
                 .fetchInvite(code)

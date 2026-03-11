@@ -13,6 +13,7 @@ import { useEffect, useState } from "preact/hooks";
 import ErrorBoundary from "../../lib/ErrorBoundary";
 import { internalSubscribe } from "../../lib/eventEmitter";
 import { isTouchscreenDevice } from "../../lib/isTouchscreenDevice";
+import { unhideDm } from "../../lib/hiddenConversations";
 
 import { useApplicationState } from "../../mobx/State";
 import { SIDEBAR_MEMBERS } from "../../mobx/stores/Layout";
@@ -100,6 +101,13 @@ export const Channel = observer(
     ({ id, server_id }: { id: string; server_id: string }) => {
         const client = useClient();
         const state = useApplicationState();
+
+        useEffect(() => {
+            const existing = client.channels.get(id);
+            if (existing?.channel_type === "DirectMessage") {
+                unhideDm(state, id);
+            }
+        }, [id, client.user?._id]);
 
         if (!client.channels.exists(id)) {
             if (server_id) {

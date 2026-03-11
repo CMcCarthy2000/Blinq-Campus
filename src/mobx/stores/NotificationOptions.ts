@@ -5,6 +5,7 @@ import { decodeTime } from "ulid";
 import { translate } from "preact-i18n";
 
 import { mapToRecord } from "../../lib/conversion";
+import { unhideDm } from "../../lib/hiddenConversations";
 
 import { history, routeInformation } from "../../context/history";
 
@@ -259,6 +260,10 @@ export default class NotificationOptions
      * @param message Message
      */
     async onMessage(message: Message) {
+        if (message.channel?.channel_type === "DirectMessage") {
+            unhideDm(this.state, message.channel_id);
+        }
+
         // Ignore if we are currently looking and focused on the channel.
         if (
             message.channel_id === routeInformation.getChannel() &&

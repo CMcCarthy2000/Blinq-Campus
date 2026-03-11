@@ -39,6 +39,7 @@ interface Props {
     content?: Children;
     head?: boolean;
     hideReply?: boolean;
+    readOnly?: boolean;
 }
 
 const Message = observer(
@@ -51,13 +52,16 @@ const Message = observer(
         head: preferHead,
         queued,
         hideReply,
+        readOnly,
     }: Props) => {
         const client = message.client;
         const user = message.author;
 
         const content = message.content;
         const head =
-            preferHead || (message.reply_ids && message.reply_ids.length > 0);
+            readOnly ||
+            preferHead ||
+            (message.reply_ids && message.reply_ids.length > 0);
 
         const userContext = attachContext
             ? useTriggerEvents("Menu", {
@@ -109,12 +113,14 @@ const Message = observer(
                     head={
                         hideReply
                             ? false
-                            : (head &&
-                                  !(
-                                      message.reply_ids &&
-                                      message.reply_ids.length > 0
-                                  )) ??
-                              false
+                            : readOnly
+                              ? true
+                              : (head &&
+                                    !(
+                                        message.reply_ids &&
+                                        message.reply_ids.length > 0
+                                    )) ??
+                                false
                     }
                     contrast={contrast}
                     sending={typeof queued !== "undefined"}
@@ -193,10 +199,11 @@ const Message = observer(
                         {message.embeds?.map((embed, index) => (
                             <Embed key={index} embed={embed} />
                         ))}
-                        <Reactions message={message} />
+                        {!readOnly && <Reactions message={message} />}
                         {(mouseHovering || reactionsOpen) &&
                             !replacement &&
-                            !isTouchscreenDevice && (
+                            !isTouchscreenDevice &&
+                            !readOnly && (
                                 <MessageOverlayBar
                                     reactionsOpen={reactionsOpen}
                                     setReactionsOpen={setReactionsOpen}

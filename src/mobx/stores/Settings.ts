@@ -31,6 +31,8 @@ export interface ISettings {
     "appearance:theme:css": string;
 
     "security:trustedOrigins": string[];
+
+    "ui:hidden_dms": string[];
 }
 
 /**

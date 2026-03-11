@@ -1,23 +1,12 @@
 import { Github } from "@styled-icons/boxicons-logos";
-import {
-    Sync as SyncIcon,
-    Globe,
-    LogOut,
-    Desktop,
-    ListUl,
-} from "@styled-icons/boxicons-regular";
+import { Globe, LogOut, Desktop, ListUl } from "@styled-icons/boxicons-regular";
 import {
     Bell,
     Palette,
-    Coffee,
     IdCard,
-    CheckShield,
-    Flask,
     User,
-    Megaphone,
     Speaker,
     Plug,
-    Bot,
     Trash,
 } from "@styled-icons/boxicons-solid";
 import { observer } from "mobx-react-lite";
@@ -37,12 +26,12 @@ import { useApplicationState } from "../../mobx/State";
 import UserIcon from "../../components/common/user/UserIcon";
 import { Username } from "../../components/common/user/UserShort";
 import UserStatus from "../../components/common/user/UserStatus";
+import { getDisplayName } from "../../lib/userDisplay";
 import ButtonItem from "../../components/navigation/items/ButtonItem";
 import {
     useClient,
     clientController,
 } from "../../controllers/client/ClientController";
-import RequiresOnline from "../../controllers/client/jsx/RequiresOnline";
 import { modalController } from "../../controllers/modals/ModalController";
 import { GIT_BRANCH, GIT_REVISION, REPO_URL } from "../../revision";
 import { APP_VERSION } from "../../version";
@@ -50,16 +39,11 @@ import { GenericSettings } from "./GenericSettings";
 import { Account } from "./panes/Account";
 import { Appearance } from "./panes/Appearance";
 import { Audio } from "./panes/Audio";
-import { ExperimentsPage } from "./panes/Experiments";
-import { Feedback } from "./panes/Feedback";
 import { Languages } from "./panes/Languages";
-import { MyBots } from "./panes/MyBots";
 import { Native } from "./panes/Native";
 import { Notifications } from "./panes/Notifications";
 import { PluginsPage } from "./panes/Plugins";
 import { Profile } from "./panes/Profile";
-import { Sessions } from "./panes/Sessions";
-import { Sync } from "./panes/Sync";
 
 const AccountHeader = styled.div`
     display: flex;
@@ -160,11 +144,6 @@ export default observer(() => {
                     title: <Text id="app.settings.pages.profile.title" />,
                 },
                 {
-                    id: "sessions",
-                    icon: <CheckShield size={20} />,
-                    title: <Text id="app.settings.pages.sessions.title" />,
-                },
-                {
                     category: (
                         <Text id="app.settings.categories.client_settings" />
                     ),
@@ -194,43 +173,16 @@ export default observer(() => {
                     title: <Text id="app.settings.pages.language.title" />,
                 },
                 {
-                    id: "sync",
-                    icon: <SyncIcon size={20} />,
-                    title: <Text id="app.settings.pages.sync.title" />,
-                },
-                {
                     id: "native",
                     hidden: !window.isNative,
                     icon: <Desktop size={20} />,
                     title: <Text id="app.settings.pages.native.title" />,
-                },
-                {
-                    id: "experiments",
-                    icon: <Flask size={20} />,
-                    title: <Text id="app.settings.pages.experiments.title" />,
-                },
-                {
-                    divider: true,
-                    category: "Blinq Campus",
-                    id: "bots",
-                    icon: <Bot size={20} />,
-                    title: <Text id="app.settings.pages.bots.title" />,
-                },
-                {
-                    id: "feedback",
-                    icon: <Megaphone size={20} />,
-                    title: <Text id="app.settings.pages.feedback.title" />,
                 },
             ]}
             children={
                 <Switch>
                     <Route path="/settings/profile">
                         <Profile />
-                    </Route>
-                    <Route path="/settings/sessions">
-                        <RequiresOnline>
-                            <Sessions />
-                        </RequiresOnline>
                     </Route>
                     <Route path="/settings/appearance">
                         <Appearance />
@@ -247,20 +199,8 @@ export default observer(() => {
                     <Route path="/settings/language">
                         <Languages />
                     </Route>
-                    <Route path="/settings/sync">
-                        <Sync />
-                    </Route>
                     <Route path="/settings/native">
                         <Native />
-                    </Route>
-                    <Route path="/settings/experiments">
-                        <ExperimentsPage />
-                    </Route>
-                    <Route path="/settings/bots">
-                        <MyBots />
-                    </Route>
-                    <Route path="/settings/feedback">
-                        <Feedback />
                     </Route>
                     <Route path="/">
                         <Account />
@@ -287,15 +227,6 @@ export default observer(() => {
                         <ButtonItem compact>
                             <Github size={20} />
                             <Text id="app.settings.pages.source_code" />
-                        </ButtonItem>
-                    </a>
-                    <a
-                        href="https://wiki.revolt.chat/notes/project/financial-support/"
-                        target="_blank"
-                        rel="noreferrer">
-                        <ButtonItem className={styles.donate} compact>
-                            <Coffee size={20} />
-                            <Text id="app.settings.pages.donate.title" />
                         </ButtonItem>
                     </a>
                     <LineDivider compact />
@@ -351,8 +282,7 @@ export default observer(() => {
                         />
                         <div className="details">
                             <span className="new">
-                                {client.user.display_name ??
-                                    client.user.username}
+                                {getDisplayName(client.user)}
                             </span>
                             <span className="full">
                                 {email ?? client.user.username}

@@ -15,6 +15,7 @@ import { useClient } from "../../../controllers/client/ClientController";
 import { modalController } from "../../../controllers/modals/ModalController";
 import Tooltip from "../Tooltip";
 import UserIcon from "./UserIcon";
+import { getDisplayName } from "../../../lib/userDisplay";
 
 const BotBadge = styled.div`
     display: inline-block;
@@ -68,9 +69,7 @@ export const Username = observer(
         override,
         ...otherProps
     }: UsernameProps) => {
-        let username =
-            (user as unknown as { display_name: string })?.display_name ??
-            user?.username;
+        let username = getDisplayName(user);
         let color = masquerade?.colour;
         let timed_out: Date | undefined;
 

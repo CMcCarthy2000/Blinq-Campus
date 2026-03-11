@@ -43,6 +43,12 @@ function getVersion() {
 }
 
 export default defineConfig({
+    server: {
+        host: process.env.VITE_DEV_HOST ?? "localhost",
+        port: Number(process.env.VITE_DEV_PORT ?? 14701),
+        strictPort: true,
+        open: process.env.VITE_DEV_OPEN_URL || false,
+    },
     plugins: [
         preact(),
         macrosPlugin(),

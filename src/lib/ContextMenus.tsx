@@ -35,6 +35,7 @@ import { takeError } from "../controllers/client/jsx/error";
 import { modalController } from "../controllers/modals/ModalController";
 import { internalEmit } from "./eventEmitter";
 import { getRenderer } from "./renderer/Singleton";
+import { getDisplayName } from "./userDisplay";
 
 interface ContextMenuData {
     user?: string;
@@ -1190,17 +1191,13 @@ export default function ContextMenus() {
                                             }>
                                             <Column gap="0">
                                                 <span>
-                                                    {user.display_name ??
-                                                        user.username}
+                                                    {getDisplayName(user)}
                                                 </span>
                                                 <span
                                                     style={{
                                                         fontSize: "0.8em",
                                                     }}>
                                                     {user.username}
-                                                    {"#"}
-                                                    {user.discriminator ??
-                                                        "0000"}
                                                 </span>
                                             </Column>
                                         </Tooltip>

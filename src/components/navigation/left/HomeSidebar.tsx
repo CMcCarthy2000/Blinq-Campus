@@ -27,6 +27,7 @@ import { modalController } from "../../../controllers/modals/ModalController";
 import { GenericSidebarBase, GenericSidebarList } from "../SidebarBase";
 import ButtonItem, { ChannelButton } from "../items/ButtonItem";
 import ConnectionStatus from "../items/ConnectionStatus";
+import { getHiddenDms } from "../../../lib/hiddenConversations";
 
 const Navbar = styled.div`
     display: flex;
@@ -49,11 +50,14 @@ export default observer(() => {
     const state = useApplicationState();
     const { channel: channel_id } = useParams<{ channel: string }>();
 
-    const channels = [...client.channels.values()].filter(
-        (x) =>
-            (x.channel_type === "DirectMessage" && x.active) ||
-            x.channel_type === "Group",
-    );
+    const hiddenDms = new Set(getHiddenDms(state));
+    const channels = [...client.channels.values()].filter((x) => {
+        if (x.channel_type === "DirectMessage") {
+            if (!x.active) return false;
+            return !hiddenDms.has(x._id);
+        }
+        return x.channel_type === "Group";
+    });
 
     const channel = client.channels.get(channel_id);
 

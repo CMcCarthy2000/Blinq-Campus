@@ -5,9 +5,11 @@ import { Text } from "preact-i18n";
 import { ModalForm } from "@revoltchat/ui";
 
 import { TextReact } from "../../../lib/i18n";
+import { hideDm } from "../../../lib/hiddenConversations";
 
 import { clientController } from "../../client/ClientController";
 import { ModalProps } from "../types";
+import { useApplicationState } from "../../../mobx/State";
 
 /**
  * Confirmation modal
@@ -24,6 +26,7 @@ export default function Confirmation(
     >,
 ) {
     const history = useHistory();
+    const state = useApplicationState();
 
     const EVENTS = {
         close_dm: ["confirm_close_dm", "close"],
@@ -78,6 +81,9 @@ export default function Confirmation(
                         await props.target.blockUser();
                         break;
                     case "close_dm":
+                        hideDm(state, props.target._id);
+                        history.push("/");
+                        break;
                     case "delete_channel":
                     case "delete_server":
                         if (props.type != "delete_channel") history.push("/");

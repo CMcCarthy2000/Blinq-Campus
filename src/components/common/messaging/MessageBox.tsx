@@ -7,7 +7,7 @@ import { ulid } from "ulid";
 
 import { Text } from "preact-i18n";
 import { memo } from "preact/compat";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import { IconButton, Picker } from "@revoltchat/ui";
 
@@ -62,7 +62,7 @@ export type UploadState =
     | { type: "sending"; files: File[] }
     | { type: "failed"; files: File[]; error: string };
 
-const Base = styled.div`
+const Base = styled.div<{ $shake?: boolean }>`
     z-index: 1;
     display: flex;
     align-items: flex-start;
@@ -76,6 +76,33 @@ const Base = styled.div`
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+    }
+
+    ${(props) =>
+        props.$shake &&
+        css`
+            animation: messageBoxShake 0.35s;
+        `}
+
+    @keyframes messageBoxShake {
+        0% {
+            transform: translateX(0);
+        }
+        20% {
+            transform: translateX(-4px);
+        }
+        40% {
+            transform: translateX(4px);
+        }
+        60% {
+            transform: translateX(-3px);
+        }
+        80% {
+            transform: translateX(3px);
+        }
+        100% {
+            transform: translateX(0);
         }
     }
 `;
@@ -137,6 +164,13 @@ const FileAction = styled.div`
 
 const FloatingLayer = styled.div`
     position: relative;
+`;
+
+const BlockedNotice = styled.div`
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--error);
+    padding-left: 12px;
 `;
 
 const ThisCodeWillBeReplacedAnywaysSoIMightAsWellJustDoItThisWay__Padding = styled.div`
@@ -222,16 +256,34 @@ export default observer(({ channel }: Props) => {
     const [typing, setTyping] = useState<boolean | number>(false);
     const [replies, setReplies] = useState<Reply[]>([]);
     const [picker, setPicker] = useState(false);
+    const [blockedNotice, setBlockedNotice] = useState<string | null>(null);
+    const [shakeBox, setShakeBox] = useState(false);
     const client = useClient();
     const translate = useTranslation();
+    const blockedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const shakeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const closePicker = useCallback(() => setPicker(false), []);
+    const triggerBlockedNotice = useCallback((message: string) => {
+        if (blockedTimer.current) {
+            clearTimeout(blockedTimer.current);
+        }
+        if (shakeTimer.current) {
+            clearTimeout(shakeTimer.current);
+        }
+
+        setBlockedNotice(message);
+        setShakeBox(false);
+        setTimeout(() => setShakeBox(true), 0);
+        shakeTimer.current = setTimeout(() => setShakeBox(false), 400);
+        blockedTimer.current = setTimeout(() => setBlockedNotice(null), 2200);
+    }, []);
 
     const renderer = getRenderer(channel);
 
     if (channel.server?.member?.timeout) {
         return (
-            <Base>
+            <Base $shake={shakeBox}>
                 <Blocked>
                     <Action>
                         <PermissionTooltip
@@ -323,10 +375,13 @@ export default observer(({ channel }: Props) => {
         if (uploadState.type === "uploading" || uploadState.type === "sending")
             return;
 
-        const content = state.draft.get(channel._id)?.content?.trim() ?? "";
-        if (uploadState.type !== "none") return sendFile(content);
+        const draftContent = state.draft.get(channel._id)?.content ?? "";
+        const content = draftContent.trim();
+        if (uploadState.type !== "none")
+            return sendFile(content, draftContent, currentReplies);
         if (content.length === 0) return;
 
+        const currentReplies = replies;
         internalEmit("NewMessages", "hide");
         stopTyping();
         setMessage();
@@ -395,7 +450,15 @@ export default observer(({ channel }: Props) => {
                     replies,
                 });
             } catch (error) {
-                state.queue.fail(nonce, takeError(error));
+                const errorType = takeError(error);
+                if (errorType === "MessageBlockedLanguage") {
+                    state.queue.remove(nonce);
+                    setMessage(draftContent);
+                    setReplies(currentReplies);
+                    triggerBlockedNotice("This message cannot be sent.");
+                    return;
+                }
+                state.queue.fail(nonce, errorType);
             }
         }
     }
@@ -405,7 +468,11 @@ export default observer(({ channel }: Props) => {
      * @param content
      * @returns
      */
-    async function sendFile(content: string) {
+    async function sendFile(
+        content: string,
+        draftContent: string,
+        currentReplies: Reply[],
+    ) {
         if (uploadState.type !== "attached" && uploadState.type !== "failed")
             return;
 
@@ -476,10 +543,18 @@ export default observer(({ channel }: Props) => {
                 attachments,
             });
         } catch (err) {
+            const errorType = takeError(err);
+            if (errorType === "MessageBlockedLanguage") {
+                setUploadState({ type: "attached", files });
+                setMessage(draftContent);
+                setReplies(currentReplies);
+                triggerBlockedNotice("This message cannot be sent.");
+                return;
+            }
             setUploadState({
                 type: "failed",
                 files,
-                error: takeError(err),
+                error: errorType,
             });
 
             return;
@@ -764,6 +839,7 @@ export default observer(({ channel }: Props) => {
                     </IconButton>
                 </Action>
             </Base>
+            {blockedNotice && <BlockedNotice>{blockedNotice}</BlockedNotice>}
         </>
     );
 });
