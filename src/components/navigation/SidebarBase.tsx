@@ -49,6 +49,8 @@ export const GenericSidebarList = styled.div`
     padding: 6px;
     flex-grow: 1;
     overflow-y: scroll;
+    --scrollbar-track: var(--secondary-background);
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 
     > img {
         width: 100%;

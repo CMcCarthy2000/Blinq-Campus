@@ -15,7 +15,6 @@ import { useContext, useEffect } from "preact/hooks";
 import { Category, IconButton } from "@revoltchat/ui";
 
 import ConditionalLink from "../../../lib/ConditionalLink";
-import PaintCounter from "../../../lib/PaintCounter";
 import { isTouchscreenDevice } from "../../../lib/isTouchscreenDevice";
 
 import { useApplicationState } from "../../../mobx/State";
@@ -176,7 +175,6 @@ export default observer(() => {
                         </ConditionalLink>
                     );
                 })}
-                <PaintCounter />
             </GenericSidebarList>
         </GenericSidebarBase>
     );

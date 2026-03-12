@@ -100,6 +100,11 @@ export default function Developer() {
     const [adminUsers, setAdminUsers] = useState<AdminUserEntry[]>([]);
     const [loadingUsers, setLoadingUsers] = useState(false);
     const [usersError, setUsersError] = useState<string | null>(null);
+    const [userQuery, setUserQuery] = useState("");
+    const [userRoleFilter, setUserRoleFilter] = useState<
+        "all" | "teachers" | "students"
+    >("all");
+    const [userSort, setUserSort] = useState<"name" | "email" | "id">("name");
     const dmPollInFlight = useRef(false);
 
     useEffect(() => {
@@ -248,6 +253,13 @@ export default function Developer() {
     const lookupUser = (userId?: string | null) => {
         if (!userId) return undefined;
         return dmUsers[userId] ?? client.users.get(userId);
+    };
+
+    const getUserRole = (entry: AdminUserEntry) => {
+        const email = entry.email?.toLowerCase() ?? "";
+        if (email.endsWith("@wgmail.org")) return "Teacher";
+        if (email.endsWith("@wgcloud.org")) return "Student";
+        return "Other";
     };
 
     const formatAuditTime = (value?: string | null) => {
@@ -405,6 +417,63 @@ export default function Developer() {
     const activeTool =
         ADMIN_TOOLS.find((tool) => tool.id === activeToolId) ?? null;
 
+    const filteredAdminUsers = useMemo(() => {
+        const query = userQuery.trim().toLowerCase();
+        const matchesQuery = (entry: AdminUserEntry) => {
+            if (!query) return true;
+            const fields = [
+                entry.username,
+                entry.display_name,
+                entry.email,
+                entry._id,
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+            return fields.includes(query);
+        };
+
+        const matchesRole = (entry: AdminUserEntry) => {
+            if (userRoleFilter === "all") return true;
+            const role = getUserRole(entry);
+            return userRoleFilter === "teachers"
+                ? role === "Teacher"
+                : role === "Student";
+        };
+
+        const list = adminUsers.filter(
+            (entry) => matchesQuery(entry) && matchesRole(entry),
+        );
+
+        const compareText = (a?: string, b?: string) =>
+            (a ?? "").toLowerCase().localeCompare((b ?? "").toLowerCase());
+
+        list.sort((a, b) => {
+            if (userSort === "email") {
+                return compareText(a.email, b.email);
+            }
+            if (userSort === "id") {
+                return compareText(a._id, b._id);
+            }
+            return compareText(a.display_name ?? a.username, b.display_name ?? b.username);
+        });
+
+        return list;
+    }, [adminUsers, userQuery, userRoleFilter, userSort]);
+
+    const userCounts = useMemo(() => {
+        let teachers = 0;
+        let students = 0;
+        let other = 0;
+        for (const entry of adminUsers) {
+            const role = getUserRole(entry);
+            if (role === "Teacher") teachers += 1;
+            else if (role === "Student") students += 1;
+            else other += 1;
+        }
+        return { teachers, students, other, total: adminUsers.length };
+    }, [adminUsers]);
+
     const cardStyle = {
         border: "1px solid var(--secondary-background)",
         borderRadius: "12px",
@@ -416,10 +485,13 @@ export default function Developer() {
         ({
             border: isActive
                 ? "1px solid var(--accent)"
-                : "1px solid transparent",
+                : "1px solid var(--secondary-background)",
             background: isActive
                 ? "var(--secondary-background)"
-                : "transparent",
+                : "var(--background)",
+            boxShadow: isActive
+                ? "0 0 0 1px rgba(0,0,0,0.12)"
+                : "0 1px 2px rgba(0,0,0,0.08)",
         }) as const;
 
     return (
@@ -469,6 +541,7 @@ export default function Developer() {
                                     background: "var(--secondary-background)",
                                 }}>
                                 <div
+                                    className="scrollbar-contrast"
                                     style={{
                                         height: "100%",
                                         overflowY: "auto",
@@ -990,7 +1063,17 @@ export default function Developer() {
                                     gap: "12px",
                                     flexWrap: "wrap",
                                 }}>
-                                <b>People</b>
+                                <div style={{ display: "grid", gap: "4px" }}>
+                                    <b>Manage Users</b>
+                                    <span style={{ opacity: 0.75, fontSize: "0.85rem" }}>
+                                        Total: {userCounts.total} · Teachers:{" "}
+                                        {userCounts.teachers} · Students:{" "}
+                                        {userCounts.students}
+                                        {userCounts.other > 0
+                                            ? ` · Other: ${userCounts.other}`
+                                            : ""}
+                                    </span>
+                                </div>
                             </div>
                             <div
                                 style={{
@@ -1002,6 +1085,7 @@ export default function Developer() {
                                     background: "var(--secondary-background)",
                                 }}>
                                 <div
+                                    className="scrollbar-contrast"
                                     style={{
                                         height: "100%",
                                         overflowY: "auto",
@@ -1017,90 +1101,157 @@ export default function Developer() {
                                             {usersError}
                                         </div>
                                     )}
-                                    <div style={{ marginBottom: "12px" }}>
-                                        <b>
-                                            Teachers
-                                            {loadingUsers ? " (loading…)" : ""}
-                                        </b>
-                                        <div style={{ marginTop: "8px" }}>
-                                            {adminUsers
-                                                .filter((entry) =>
-                                                    entry.email
-                                                        ?.toLowerCase()
-                                                        .endsWith(
-                                                            "@wgmail.org",
-                                                        ),
-                                                )
-                                                .map((entry) => (
-                                                    <div
-                                                        key={entry._id}
-                                                        style={{
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            justifyContent:
-                                                                "space-between",
-                                                            gap: "12px",
-                                                            padding: "8px",
-                                                            border:
-                                                                "1px solid var(--secondary-background)",
-                                                            borderRadius: "8px",
-                                                            marginBottom: "6px",
-                                                        }}>
-                                                        <div>
-                                                            <div>
-                                                                <b>
-                                                                    {entry.display_name ??
-                                                                        entry.username}
-                                                                </b>
-                                                            </div>
-                                                            <div
-                                                                style={{
-                                                                    opacity: 0.8,
-                                                                    fontSize:
-                                                                        "0.85rem",
-                                                                }}>
-                                                                {entry.email ??
-                                                                    "No email"}
-                                                            </div>
-                                                        </div>
-                                                        <Button
-                                                            onClick={() =>
-                                                                openDmWithUser(
-                                                                    entry._id,
-                                                                )
-                                                            }>
-                                                            Message
-                                                        </Button>
-                                                    </div>
-                                                ))}
+                                    <div
+                                        style={{
+                                            display: "grid",
+                                            gap: "10px",
+                                            marginBottom: "12px",
+                                        }}>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                flexWrap: "wrap",
+                                                gap: "8px",
+                                                alignItems: "center",
+                                            }}>
+                                            <input
+                                                placeholder="Search name, email, or ID"
+                                                value={userQuery}
+                                                onInput={(event) =>
+                                                    setUserQuery(
+                                                        (
+                                                            event.target as HTMLInputElement
+                                                        ).value,
+                                                    )
+                                                }
+                                                style={{
+                                                    flex: "1 1 260px",
+                                                    minWidth: "220px",
+                                                    padding: "10px 12px",
+                                                    borderRadius: "10px",
+                                                    border: "1px solid var(--accent)",
+                                                    background:
+                                                        "var(--secondary-background)",
+                                                    color: "var(--foreground)",
+                                                    outline: "none",
+                                                }}
+                                            />
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    gap: "6px",
+                                                }}>
+                                                <Button
+                                                    size="small"
+                                                    subtle={
+                                                        userRoleFilter !== "all"
+                                                    }
+                                                    onClick={() =>
+                                                        setUserRoleFilter(
+                                                            "all",
+                                                        )
+                                                    }>
+                                                    All
+                                                </Button>
+                                                <Button
+                                                    size="small"
+                                                    subtle={
+                                                        userRoleFilter !==
+                                                        "teachers"
+                                                    }
+                                                    onClick={() =>
+                                                        setUserRoleFilter(
+                                                            "teachers",
+                                                        )
+                                                    }>
+                                                    Teachers
+                                                </Button>
+                                                <Button
+                                                    size="small"
+                                                    subtle={
+                                                        userRoleFilter !==
+                                                        "students"
+                                                    }
+                                                    onClick={() =>
+                                                        setUserRoleFilter(
+                                                            "students",
+                                                        )
+                                                    }>
+                                                    Students
+                                                </Button>
+                                            </div>
+                                            <label
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: "6px",
+                                                    fontSize: "0.85rem",
+                                                }}>
+                                                Sort
+                                                <select
+                                                    value={userSort}
+                                                    onChange={(event) =>
+                                                        setUserSort(
+                                                            (event.target as HTMLSelectElement)
+                                                                .value as
+                                                                | "name"
+                                                                | "email"
+                                                                | "id",
+                                                        )
+                                                    }
+                                                    style={{
+                                                        padding: "6px 8px",
+                                                        borderRadius: "8px",
+                                                        border:
+                                                            "1px solid var(--secondary-background)",
+                                                        background:
+                                                            "var(--background)",
+                                                        color: "var(--foreground)",
+                                                    }}>
+                                                    <option value="name">
+                                                        Name
+                                                    </option>
+                                                    <option value="email">
+                                                        Email
+                                                    </option>
+                                                    <option value="id">
+                                                        ID
+                                                    </option>
+                                                </select>
+                                            </label>
                                         </div>
+                                        {loadingUsers && (
+                                            <div style={{ opacity: 0.7 }}>
+                                                Loading users…
+                                            </div>
+                                        )}
                                     </div>
-                                    <div>
-                                        <b>Students</b>
-                                        <div style={{ marginTop: "8px" }}>
-                                            {adminUsers
-                                                .filter((entry) =>
-                                                    entry.email
-                                                        ?.toLowerCase()
-                                                        .endsWith(
-                                                            "@wgcloud.org",
-                                                        ),
-                                                )
-                                                .map((entry) => (
+                                    <div
+                                        style={{
+                                            display: "grid",
+                                            gap: "8px",
+                                        }}>
+                                        {filteredAdminUsers.map((entry) => {
+                                            const role = getUserRole(entry);
+                                            return (
+                                                <div
+                                                    key={entry._id}
+                                                    style={{
+                                                        display: "grid",
+                                                        gap: "8px",
+                                                        padding: "10px",
+                                                        border:
+                                                            "1px solid var(--secondary-background)",
+                                                        borderRadius: "10px",
+                                                    }}>
                                                     <div
-                                                        key={entry._id}
                                                         style={{
                                                             display: "flex",
                                                             alignItems: "center",
                                                             justifyContent:
                                                                 "space-between",
                                                             gap: "12px",
-                                                            padding: "8px",
-                                                            border:
-                                                                "1px solid var(--secondary-background)",
-                                                            borderRadius: "8px",
-                                                            marginBottom: "6px",
-                                                            opacity: 0.9,
+                                                            flexWrap: "wrap",
                                                         }}>
                                                         <div>
                                                             <div>
@@ -1108,20 +1259,89 @@ export default function Developer() {
                                                                     {entry.display_name ??
                                                                         entry.username}
                                                                 </b>
+                                                                <span
+                                                                    style={{
+                                                                        marginLeft:
+                                                                            "8px",
+                                                                        fontSize:
+                                                                            "0.75rem",
+                                                                        padding:
+                                                                            "2px 8px",
+                                                                        borderRadius:
+                                                                            "999px",
+                                                                        border:
+                                                                            "1px solid var(--secondary-background)",
+                                                                        opacity:
+                                                                            0.8,
+                                                                    }}>
+                                                                    {role}
+                                                                </span>
                                                             </div>
                                                             <div
                                                                 style={{
                                                                     opacity: 0.8,
                                                                     fontSize:
                                                                         "0.85rem",
+                                                                    display:
+                                                                        "grid",
+                                                                    gap: "2px",
                                                                 }}>
-                                                                {entry.email ??
-                                                                    "No email"}
+                                                                <div>
+                                                                    {entry.email ??
+                                                                        "No email"}
+                                                                </div>
+                                                                <div>
+                                                                    ID:{" "}
+                                                                    <code>
+                                                                        {entry._id}
+                                                                    </code>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <div
+                                                            style={{
+                                                                display:
+                                                                    "flex",
+                                                                gap: "8px",
+                                                                alignItems:
+                                                                    "center",
+                                                                flexWrap:
+                                                                    "wrap",
+                                                            }}>
+                                                            <Button
+                                                                size="small"
+                                                                onClick={() =>
+                                                                    openDmWithUser(
+                                                                        entry._id,
+                                                                    )
+                                                                }>
+                                                                Message
+                                                            </Button>
+                                                            <Button
+                                                                size="small"
+                                                                subtle
+                                                                onClick={() =>
+                                                                    navigator.clipboard
+                                                                        ?.writeText(
+                                                                            entry._id,
+                                                                        )
+                                                                        .catch(
+                                                                            () =>
+                                                                                undefined,
+                                                                        )
+                                                                }>
+                                                                Copy ID
+                                                            </Button>
+                                                        </div>
                                                     </div>
-                                                ))}
-                                        </div>
+                                                </div>
+                                            );
+                                        })}
+                                        {filteredAdminUsers.length === 0 && (
+                                            <div style={{ opacity: 0.7 }}>
+                                                No users match that filter.
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -1197,6 +1417,7 @@ export default function Developer() {
                         borderRadius: "12px",
                         padding: "12px",
                         background: "var(--background)",
+                        boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
                     }}>
                     <b>Admin Tools</b>
                     <Button
@@ -1242,7 +1463,7 @@ export default function Developer() {
                             setActiveToolId("people");
                             setActiveSidebarItem("people");
                         }}>
-                        People
+                        Manage Users
                     </Button>
                     {ADMIN_TOOLS.length ? (
                         ADMIN_TOOLS.map((tool) => (

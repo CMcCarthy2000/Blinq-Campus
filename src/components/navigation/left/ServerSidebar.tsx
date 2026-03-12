@@ -8,7 +8,6 @@ import { useEffect } from "preact/hooks";
 import { Category } from "@revoltchat/ui";
 
 import ConditionalLink from "../../../lib/ConditionalLink";
-import PaintCounter from "../../../lib/PaintCounter";
 import { internalEmit } from "../../../lib/eventEmitter";
 import { isTouchscreenDevice } from "../../../lib/isTouchscreenDevice";
 
@@ -150,7 +149,6 @@ export default observer(() => {
                 })}>
                 {elements}
             </ServerList>
-            <PaintCounter small />
         </ServerBase>
     );
 });

@@ -67,6 +67,7 @@ const Base = styled.div<{ $shake?: boolean }>`
     display: flex;
     align-items: flex-start;
     background: var(--message-box);
+    border-radius: 10px;
 
     textarea {
         font-size: var(--text-size);
