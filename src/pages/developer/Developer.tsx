@@ -90,6 +90,9 @@ export default function Developer() {
     const [dmMessages, setDmMessages] = useState<any[]>([]);
     const [dmUsers, setDmUsers] = useState<Record<string, any>>({});
     const [loadingDmMessages, setLoadingDmMessages] = useState(false);
+    const [dmImageFilter, setDmImageFilter] = useState<"all" | "flagged">(
+        "all",
+    );
     const [activeToolId, setActiveToolId] = useState<string | null>("dm");
     const [activeSidebarItem, setActiveSidebarItem] = useState<string | null>(
         "dm",
@@ -196,6 +199,10 @@ export default function Developer() {
     useEffect(() => {
         loadDmMessages(false);
     }, [client.user?._id, selectedDm]);
+
+    useEffect(() => {
+        setDmImageFilter("all");
+    }, [selectedDm?.channel_id]);
 
     useEffect(() => {
         if (!selectedDm) return;
@@ -308,6 +315,42 @@ export default function Developer() {
         entries.sort((a, b) => a.time - b.time);
         return entries;
     }, [dmMessages, deletedMessageAudits, selectedDm]);
+
+    const messageHasFlaggedImage = (message: any) => {
+        const attachments = message?.attachments ?? [];
+        return attachments.some((attachment: any) => {
+            const moderation = attachment?.image_moderation;
+            return moderation?.nsfw || moderation?.profanity;
+        });
+    };
+
+    const getMessageModerationLabels = (message: any) => {
+        const attachments = message?.attachments ?? [];
+        const labels = new Set<string>();
+        for (const attachment of attachments) {
+            const moderation = attachment?.image_moderation;
+            if (!moderation) continue;
+            if (moderation.nsfw) {
+                labels.add(
+                    moderation.nsfw_label
+                        ? `NSFW (${moderation.nsfw_label})`
+                        : "NSFW",
+                );
+            }
+            if (moderation.profanity) {
+                labels.add("Profanity");
+            }
+        }
+        return Array.from(labels);
+    };
+
+    const filteredDmEntries = useMemo(() => {
+        if (dmImageFilter === "all") return mergedDmEntries;
+        return mergedDmEntries.filter(
+            (entry) =>
+                entry.kind === "message" && messageHasFlaggedImage(entry.message),
+        );
+    }, [dmImageFilter, mergedDmEntries]);
 
     const renderDeletedMessage = (entry: DmAuditEntry) => {
         const author = lookupUser(entry.author_id);
@@ -435,16 +478,58 @@ export default function Developer() {
                                     {selectedDm ? (
                                         <>
                                             <div style={{ marginBottom: "12px" }}>
-                                                <b>
-                                                    {selectedDm.user_a_name} and{" "}
-                                                    {selectedDm.user_b_name}
-                                                </b>
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "space-between",
+                                                        gap: "12px",
+                                                        flexWrap: "wrap",
+                                                    }}>
+                                                    <b>
+                                                        {selectedDm.user_a_name} and{" "}
+                                                        {selectedDm.user_b_name}
+                                                    </b>
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "8px",
+                                                        }}>
+                                                        <Button
+                                                            onClick={() =>
+                                                                setDmImageFilter(
+                                                                    "all",
+                                                                )
+                                                            }
+                                                            size="small"
+                                                            subtle={
+                                                                dmImageFilter !==
+                                                                "all"
+                                                            }>
+                                                            All messages
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() =>
+                                                                setDmImageFilter(
+                                                                    "flagged",
+                                                                )
+                                                            }
+                                                            size="small"
+                                                            subtle={
+                                                                dmImageFilter !==
+                                                                "flagged"
+                                                            }>
+                                                            Flagged images
+                                                        </Button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             {loadingDmMessages ? (
                                                 <div>Loading messages…</div>
                                             ) : (
                                                 <div>
-                                                    {mergedDmEntries.map(
+                                                    {filteredDmEntries.map(
                                                         (entry) => {
                                                             if (
                                                                 entry.kind ===
@@ -468,20 +553,47 @@ export default function Developer() {
                                                                     entry.message,
                                                                 );
 
+                                                            const labels =
+                                                                getMessageModerationLabels(
+                                                                    entry.message,
+                                                                );
+
                                                             return (
-                                                                <Message
+                                                                <div
                                                                     key={
                                                                         entry.id
-                                                                    }
-                                                                    message={
-                                                                        instance as any
-                                                                    }
-                                                                    attachContext={
-                                                                        false
-                                                                    }
-                                                                    head
-                                                                    readOnly
-                                                                />
+                                                                    }>
+                                                                    {labels.length >
+                                                                        0 && (
+                                                                        <div
+                                                                            style={{
+                                                                                margin:
+                                                                                    "6px 0",
+                                                                                fontSize:
+                                                                                    "0.75rem",
+                                                                                opacity:
+                                                                                    0.75,
+                                                                                textTransform:
+                                                                                    "uppercase",
+                                                                                letterSpacing:
+                                                                                    "0.04em",
+                                                                            }}>
+                                                                            {labels.join(
+                                                                                " · ",
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                    <Message
+                                                                        message={
+                                                                            instance as any
+                                                                        }
+                                                                        attachContext={
+                                                                            false
+                                                                        }
+                                                                        head
+                                                                        readOnly
+                                                                    />
+                                                                </div>
                                                             );
                                                         },
                                                     )}

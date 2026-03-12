@@ -377,11 +377,11 @@ export default observer(({ channel }: Props) => {
 
         const draftContent = state.draft.get(channel._id)?.content ?? "";
         const content = draftContent.trim();
+        const currentReplies = replies;
         if (uploadState.type !== "none")
             return sendFile(content, draftContent, currentReplies);
         if (content.length === 0) return;
 
-        const currentReplies = replies;
         internalEmit("NewMessages", "hide");
         stopTyping();
         setMessage();
