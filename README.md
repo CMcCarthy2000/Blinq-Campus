@@ -1,6 +1,6 @@
 # Blinq Campus
 
-#### Pre demo
+#### Pre demo (build: pre-demo 2)
 
 ## Description
 
