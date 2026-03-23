@@ -1,0 +1,37 @@
+Blinq-Campus initial bug list (early demo phase)
+
+1. login form mode / validation bug (critical UX/security)
+   - In src/pages/login/forms/Form.tsx, for page "login" onSubmit immediately returns unless adminTestMode is true.
+   - This disables all email/password submit paths for regular login and allows only Google or dev admin login; may be expected for OAuth-only, but states mismatch if custom domains intended.
+   - Suggestion: enforce allowed-provider logic and avoid dead branch.
+
+2. mail provider allowlist is only UI hint (not enforcement)
+   - src/pages/login/forms/MailProvider.tsx shows warning for non-recommended domains but it does not block non-approved domains.
+   - Critical: implement server-side and client-side allowlist check in Form submit (not just UI button text).
+
+3. Open.tsx useEffect missing dependency array & render side-effects
+   - src/pages/Open.tsx has useEffect without deps and with redirect logic derived from props; triggers each render and may cause infinite loops in edge cases.
+   - This can cause repeated history mutations and race issues.
+
+4. route ordering issue in App/RevoltApp may cause less specific routes to consume before more specific
+   - src/pages/app.tsx has /login and /login/* handling first and root "/" last (good), but in RevoltApp, /channel/:channel is after /server/:server maybe okay; check for path collisions.
+   - /settings and /discover/ etc currently exempted; verify the route precedence is expected.
+
+5. optional security issue in mapMailProvider fallback
+   - `mapMailProvider` uses `https://${domain}` for unknown domains, this may produce invalid URL or allow typosquatting.
+   - sg: only provide trust Brands for known domains, else do not render link.
+
+7. inconsistent i18n for errors
+   - In Form.tsx, setError with raw string keys (`invalid_invite`, etc) then 0 fallback in translation; may show ugly messages if missing.
+
+8. status alert UI uses majority of `alert.actions` mapping; no key on array items
+   - In Login.tsx and RevoltApp.tsx, mapping React array without `key` could cause warnings.
+
+9. potential insecure redirect in OAuth session handling
+   - src/pages/app.tsx reads hash token/user id and adds session, but doesn't authenticate origin; maybe fine.
+
+---
+General recommendations:
+- Add automated tests for login flow (unit + e2e with playwright/cypress)
+- Add a guard function in Form.tsx `isAllowedEmailProvider(email)` and use it both in login/signup and in MailProvider.
+- Ensure server endpoint rejects invalid domain, not only client.

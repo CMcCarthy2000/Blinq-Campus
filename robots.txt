@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /api/
+Disallow: /auth/
+Disallow: /settings/
+Disallow: /invite/
+Disallow: /login/
+Disallow: /register/
+
+# allow public front page and assets
+Allow: /
+
+# (optional) sitemap location if available
+# Sitemap: https://yourdomain.example/sitemap.xml
