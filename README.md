@@ -1,6 +1,6 @@
 # Blinq Campus
 
-#### Pre demo (build: pre-demo 2)
+#### Pre demo (build: pre-demo 4)
 
 ## Description
 
@@ -49,7 +49,8 @@ tmux a -t 4
 
 | Command                                 | Description                                  |
 | --------------------------------------- | -------------------------------------------- |
-| `yarn pull`                             | Setup assets required for Blinq Campus.         |
+| `yarn install`                          | Installs yarn                                |
+| `yarn pull`                             | Setup assets required for Blinq Campus.      |
 | `yarn dev`                              | Start the chat client in development mode.   |
 | `yarn build`                            | Build the chat client.                       |
 | `yarn build:deps`                       | Build external dependencies.                 |

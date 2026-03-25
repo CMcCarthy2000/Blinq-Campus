@@ -12,8 +12,8 @@
                                                        
 CREATE TESTING USER [✓] 
 REDO USER INTERFACE [ ] -- Mainly working on the login ui
-SECURE THE ADMIN PAGE [ ]
-SET UP WEB SERVER [ ] 
+SECURE THE ADMIN PAGE [✓]
+SET UP WEB SERVER [✓] 
 SET UP VOICE CHAT [ ] 
 SET UP MESSAGE MONITORING [ ] 
 CREATE APPLICATION FOR MAC/WINDOWS/LINUX [ ] 

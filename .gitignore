@@ -6,6 +6,8 @@ dist-ssr
 *.local
 *.log
 /.idea
+/testing
+/test-items
 
 .yarn/cache
 .yarn/install-state.gz

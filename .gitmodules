@@ -8,5 +8,5 @@
 	branch = master
 [submodule "external/revolt.js"]
 	path = external/revolt.js
-	url = https://github.com/revoltchat/revolt.js
-	branch = master
+	url = https://github.com/stoatchat/for-legacy-web
+	branch = dev
