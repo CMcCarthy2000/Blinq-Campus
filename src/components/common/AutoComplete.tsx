@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Link } from "react-router-dom";
-import { Channel, User } from "revolt.js";
-import { Emoji as CustomEmoji } from "revolt.js/esm/maps/Emojis";
+import { Channel, Emoji as CustomEmoji, User } from "revolt.js";
 import styled, { css } from "styled-components/macro";
 
-import { StateUpdater, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useState } from "preact/hooks";
 
 import { emojiDictionary } from "../../assets/emojis";
 import { useClient } from "../../controllers/client/ClientController";
@@ -39,7 +38,7 @@ export type SearchClues = {
 export type AutoCompleteProps = {
     detached?: boolean;
     state: AutoCompleteState;
-    setState: StateUpdater<AutoCompleteState>;
+    setState: Dispatch<StateUpdater<AutoCompleteState>>;
 
     onKeyUp: (ev: KeyboardEvent) => void;
     onKeyDown: (ev: KeyboardEvent) => boolean;

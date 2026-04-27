@@ -46,7 +46,7 @@ self.addEventListener("push", (event) => {
     async function process() {
         if (event.data) {
             const data = event.data.json();
-            await self.registration.showNotification(data.author, {
+            const options = {
                 icon: data.icon,
                 image: data.image,
                 body: data.body,
@@ -54,7 +54,12 @@ self.addEventListener("push", (event) => {
                 tag: data.tag,
                 badge: "https://local.blinqcampus.chat/assets/icons/monochrome.svg",
                 data: data.url,
-            });
+            };
+
+            await self.registration.showNotification(
+                data.author,
+                options as NotificationOptions,
+            );
         }
     }
     event.waitUntil(process());

@@ -1,8 +1,7 @@
 import EventEmitter from "eventemitter3";
 import * as mediasoupClient from "mediasoup-client";
 import { types } from "mediasoup-client";
-
-import { Device, Producer, Transport } from "mediasoup-client/lib/types";
+import { Device, Producer, Transport } from "mediasoup-client/types";
 
 import { useApplicationState } from "../../mobx/State";
 

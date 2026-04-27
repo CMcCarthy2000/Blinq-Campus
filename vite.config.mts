@@ -1,10 +1,12 @@
 import replace from "@rollup/plugin-replace";
 import { readFileSync } from "fs";
 import { resolve } from "path";
+import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-
 import preact from "@preact/preset-vite";
+
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 function getGitRevision() {
     try {
@@ -43,8 +45,10 @@ function getVersion() {
 export default defineConfig({
     server: {
         host: process.env.VITE_DEV_HOST ?? "localhost",
-        port: Number(process.env.VITE_DEV_PORT ?? 14701),
-        strictPort: true,
+        allowedHosts: [ "localhost" , "local.blinqcampus", "local.blinqcampus.chat"
+        ],
+        port: Number(process.env.VITE_DEV_PORT ?? 8080),
+        strictPort: false,
         open: process.env.VITE_DEV_OPEN_URL || false,
     },
     plugins: [
@@ -114,6 +118,13 @@ export default defineConfig({
             preventAssignment: true,
         }) as any,
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+            },
+        },
+    },
     build: {
         sourcemap: true,
         rollupOptions: {
@@ -123,16 +134,12 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        exclude: [
-            "revolt.js",
-            "preact-context-menu",
-            "@revoltchat/ui",
-            "preact/debug",
-        ],
+        exclude: ["revolt.js", "preact-context-menu", "@revoltchat/ui"]
     },
     resolve: {
         alias: {
             "preact/debug": resolve(__dirname, "src/lib/noop.ts"),
+            "styled-components/macro": "styled-components",
         },
         preserveSymlinks: true,
     },

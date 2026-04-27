@@ -8,6 +8,7 @@ import { useEffect, useErrorBoundary, useState } from "preact/hooks";
 import { Button } from "@revoltchat/ui";
 
 import { GIT_REVISION } from "../revision";
+import { ERROR_REPORT_URL } from "../version";
 
 const CrashContainer = styled.div`
     // defined for the Button component
@@ -39,17 +40,22 @@ interface Props {
     section: "client" | "renderer";
 }
 
-const ERROR_URL = "https://reporting.revolt.chat";
-
 export function reportError(error: Error, section: string) {
+    if (!ERROR_REPORT_URL) {
+        console.error(`[${section}]`, error);
+        return;
+    }
+
     stackTrace.fromError(error).then((stackframes) =>
-        axios.post(ERROR_URL, {
+        axios.post(ERROR_REPORT_URL, {
             stackframes,
             rawStackTrace: error.stack,
             origin: window.origin,
             commitSHA: GIT_REVISION,
             userAgent: navigator.userAgent,
             section,
+        }).catch((reportError) => {
+            console.error("Failed to report error:", reportError);
         }),
     );
 }
@@ -105,7 +111,11 @@ export default function ErrorBoundary({ children, section }: Props) {
                 <pre>
                     <code>{error?.stack}</code>
                 </pre>
-                <div>This error has been automatically reported.</div>
+                <div>
+                    {ERROR_REPORT_URL
+                        ? "This error has been automatically reported."
+                        : "Automatic error reporting is disabled for this environment."}
+                </div>
             </CrashContainer>
         );
     }

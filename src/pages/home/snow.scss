@@ -46,23 +46,23 @@ $fontSize: 40px;
     }
 
     @while ($count > 0) {
-        $left: random(100);
+        $left: math.random(100);
         $deltaLeft: math.div(
-            random(2 * $windNoise * 10),
+            math.random(2 * $windNoise * 10),
             10 - $windNoise + $windSpeed
         );
         $scale: 1 +
             math.div(
-                math.div(random(2 * $sizeNoise * 10), 10 - $sizeNoise),
+                math.div(math.random(2 * $sizeNoise * 10), 10 - $sizeNoise),
                 100
             );
 
         .snowflake:nth-child(#{$count}) {
             animation: animation-snowflake-#{$count} linear infinite;
             animation-duration: $fallDuration +
-                math.div(random($fallDuration * 10), 10) +
+                math.div(math.random($fallDuration * 10), 10) +
                 s;
-            animation-delay: math.div(random(2 * $fallDuration * 10), 10) -
+            animation-delay: math.div(math.random(2 * $fallDuration * 10), 10) -
                 (2 * $fallDuration) +
                 s;
         }
@@ -73,9 +73,9 @@ $fontSize: 40px;
                 top: calc(0% - #{$screenOffset});
                 transform: scale($scale)
                     rotate3d(
-                        math.div(random(100), 100),
-                        math.div(random(100), 100),
-                        math.div(random(100), 100),
+                        math.div(math.random(100), 100),
+                        math.div(math.random(100), 100),
+                        math.div(math.random(100), 100),
                         0deg
                     );
             }
@@ -84,11 +84,11 @@ $fontSize: 40px;
                 top: calc(100% + #{$screenOffset});
                 transform: scale($scale)
                     rotate3d(
-                        math.div(random(100), 100),
-                        math.div(random(100), 100),
-                        math.div(random(100), 100),
-                        (random($rotation) + $rotation) *
-                            ((random(2) - 1) * 2 - 1) + deg
+                        math.div(math.random(100), 100),
+                        math.div(math.random(100), 100),
+                        math.div(math.random(100), 100),
+                        (math.random($rotation) + $rotation) *
+                            ((math.random(2) - 1) * 2 - 1) + deg
                     );
             }
         }

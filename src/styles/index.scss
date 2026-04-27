@@ -1,9 +1,9 @@
-@import "variables";
-@import "context-menu";
-@import "elements";
-@import "page";
+@use "variables";
+@use "context-menu";
+@use "elements";
+@use "page";
 
-@import "react-overlapping-panels/dist";
+@use "react-overlapping-panels/dist";
 @import "tippy.js/dist/tippy.css";
 @import "tippy.js/animations/shift-away.css";
 

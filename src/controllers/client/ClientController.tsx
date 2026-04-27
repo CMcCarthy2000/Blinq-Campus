@@ -27,6 +27,7 @@ class ClientController {
      * Server configuration
      */
     private configuration: API.RevoltConfig | null;
+    private configurationPromise: Promise<API.RevoltConfig> | null;
 
     /**
      * Map of user IDs to sessions
@@ -43,12 +44,8 @@ class ClientController {
             apiURL: import.meta.env.VITE_API_URL ?? DEFAULT_API_URL,
         });
 
-        // ! FIXME: loop until success infinitely
-        this.apiClient
-            .fetchConfiguration()
-            .then(() => (this.configuration = this.apiClient.configuration!));
-
         this.configuration = null;
+        this.configurationPromise = null;
         this.sessions = new ObservableMap();
         this.current = null;
 
@@ -61,6 +58,31 @@ class ClientController {
         injectController("client", this);
     }
 
+    private async ensureConfiguration() {
+        if (this.configuration) {
+            return this.configuration;
+        }
+
+        if (!this.configurationPromise) {
+            this.configurationPromise = this.apiClient
+                .fetchConfiguration()
+                .then(() => {
+                    const configuration = this.apiClient.configuration;
+                    if (!configuration) {
+                        throw new Error("Failed to load server configuration.");
+                    }
+
+                    this.configuration = configuration;
+                    return configuration;
+                })
+                .finally(() => {
+                    this.configurationPromise = null;
+                });
+        }
+
+        return this.configurationPromise;
+    }
+
     @action pickNextSession() {
         this.switchAccount(
             this.current ?? this.sessions.keys().next().value ?? null,
@@ -71,7 +93,9 @@ class ClientController {
      * Hydrate sessions and start client lifecycles.
      * @param auth Authentication store
      */
-    @action hydrate(auth: Auth) {
+    @action async hydrate(auth: Auth) {
+        await this.ensureConfiguration();
+
         for (const entry of auth.getAccounts()) {
             this.addSession(entry, "existing");
         }
@@ -141,11 +165,12 @@ class ClientController {
      * @param entry Session Information
      * @param knowledge Whether the session is new or existing
      */
-    @action addSession(
+    @action async addSession(
         entry: { session: SessionPrivate; apiUrl?: string },
         knowledge: "new" | "existing",
     ) {
         const user_id = entry.session.user_id!;
+        const configuration = await this.ensureConfiguration();
 
         const session = new Session();
         this.sessions.set(user_id, session);
@@ -156,7 +181,7 @@ class ClientController {
                 action: "LOGIN",
                 session: entry.session,
                 apiUrl: entry.apiUrl,
-                configuration: this.configuration!,
+                configuration,
                 knowledge,
             })
             .catch((err) => {
@@ -182,6 +207,8 @@ class ClientController {
      * @param credentials Credentials
      */
     async login(credentials: API.DataLogin) {
+        await this.ensureConfiguration();
+
         const browser = detect();
 
         // Generate a friendly name for this browser

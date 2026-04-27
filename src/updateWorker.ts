@@ -26,7 +26,7 @@ import { useEffect, useState } from "preact/hooks";
 import { internalEmit, internalSubscribe } from "./lib/eventEmitter";
 
 import { modalController } from "./controllers/modals/ModalController";
-import { APP_VERSION } from "./version";
+import { APP_VERSION, HEALTHCHECK_URL } from "./version";
 
 const INTERVAL_HOUR = 36e5;
 
@@ -95,8 +95,12 @@ export function useSystemAlert() {
  * Check whether the client is out of date
  */
 async function checkVersion() {
+    if (!HEALTHCHECK_URL) {
+        return;
+    }
+
     const { version, poll_rate, alert } = (await fetch(
-        "https://health.revolt.chat/api/health",
+        HEALTHCHECK_URL,
     ).then((res) => res.json())) as {
         version: string;
         poll_rate?: number;
@@ -129,10 +133,7 @@ async function checkVersion() {
     }
 }
 
-if (
-    import.meta.env.VITE_API_URL === "https://api.revolt.chat" ||
-    import.meta.env.VITE_API_URL === "https://local.blinqcampus.chat/api"
-) {
+if (HEALTHCHECK_URL) {
     // Check for critical updates hourly
     schedule();
     checkVersion();

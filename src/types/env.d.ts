@@ -5,6 +5,8 @@ interface ImportMetaEnv {
     VITE_RABBITMQ_URL?: string;
     VITE_ADMIN_API_URL?: string;
     VITE_API_DOCS_URL?: string;
+    VITE_ERROR_REPORT_URL?: string;
+    VITE_HEALTHCHECK_URL?: string;
     VITE_THEMES_URL: string;
     BASE_URL: string;
 }

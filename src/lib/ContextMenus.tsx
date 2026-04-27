@@ -125,10 +125,10 @@ export default function ContextMenus() {
     const client = session.client!;
     const userId = client.user!._id;
     const state = useApplicationState();
-    const history = useHistory();
     const isOnline = session.state === "Online";
+    const history = useHistory();
 
-    function contextClick(data?: Action) {
+    function contextClick(data?: any) {
         if (typeof data === "undefined") return;
 
         (async () => {
@@ -1187,7 +1187,9 @@ export default function ContextMenus() {
                                         }>
                                         <Tooltip
                                             content={
-                                                <Text id="app.special.copy_username" />
+                                                <Text
+                                                    id="app.special.copy_username"
+                                                /> as any
                                             }>
                                             <Column gap="0">
                                                 <span>
